@@ -22,7 +22,7 @@ export interface AnnouncementData {
 }
 
 // --- Helper Functions ---
-const API_URL = 'http://localhost:5000/api/announcements';
+const API_URL = 'https://capstone1-project.onrender.com/api/announcements';
 
 const getTagClass = (tag: string) => {
   switch (tag?.toUpperCase()) {
