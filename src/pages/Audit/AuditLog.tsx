@@ -43,7 +43,7 @@ export default function AuditLog({ initialData = [] }: AuditProps) {
 
       try {
         const token = localStorage.getItem('token');
-        const res = await fetch('http://localhost:5000/api/audit-logs', {
+        const res = await fetch('https://capstone1-project.onrender.com/api/audit-logs', {
           headers: token ? { Authorization: `Bearer ${token}` } : undefined,
         });
 
