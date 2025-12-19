@@ -55,6 +55,9 @@ export interface DashboardProps {
   onNavigate: (view: ViewType) => void;
 }
 
+// --- FIXED: Use Live Backend URL ---
+const BASE_URL = "https://capstone1-project.onrender.com";
+
 export default function Dashboard({
   stats,
   currentUser,
@@ -94,12 +97,12 @@ export default function Dashboard({
       try {
         setLoading(true);
 
-        // 1. Stats
-        const statsRes = await fetch('http://localhost:5000/api/stats', { headers });
+        // 1. Stats (UPDATED URL)
+        const statsRes = await fetch(`${BASE_URL}/api/stats`, { headers });
         if (statsRes.ok) setFetchedStats(await statsRes.json());
 
-        // 2. Docs (Pending)
-        const docsRes = await fetch('http://localhost:5000/api/certificates', { headers });
+        // 2. Docs (Pending) (UPDATED URL)
+        const docsRes = await fetch(`${BASE_URL}/api/certificates`, { headers });
         let docsList: DocumentRequest[] = [];
         if (docsRes.ok) {
             const data = await docsRes.json();
@@ -108,8 +111,8 @@ export default function Dashboard({
                 .map((d: any) => ({ ...d, type: 'document' }));
         }
 
-        // 3. Blotters (Active OR Online)
-        const blotterRes = await fetch('http://localhost:5000/api/blotters', { headers });
+        // 3. Blotters (Active OR Online) (UPDATED URL)
+        const blotterRes = await fetch(`${BASE_URL}/api/blotters`, { headers });
         let blotterList: BlotterCase[] = [];
         if (blotterRes.ok) {
             const data = await blotterRes.json();
