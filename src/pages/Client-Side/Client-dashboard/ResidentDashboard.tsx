@@ -7,9 +7,10 @@ import type { Announcement } from './Modal/Models-TypeScript/Anc-types';
 // Modals
 import AnnouncementModal from './Modal/AnnouncementModal';
 import BlotterModal from './Modal/Models-Blotter/Model-Blotter'; 
-import DocsRequestModal from './Modal/Models-Documents/DocsRequestModal'; // <--- NEW IMPORT (Check your path)
+import DocsRequestModal from './Modal/Models-Documents/DocsRequestModal'; 
 
-const API_BASE_URL = "http://localhost:5000/api";
+// --- FIXED: Use Live Backend URL ---
+const API_BASE_URL = "https://capstone1-project.onrender.com/api";
 
 interface UserProfile {
   name: string;
@@ -25,7 +26,7 @@ const ResidentDashboard: React.FC = () => {
   // --- Modal States ---
   const [selectedAnnouncement, setSelectedAnnouncement] = useState<Announcement | null>(null);
   const [isBlotterModalOpen, setIsBlotterModalOpen] = useState(false);
-  const [isDocsModalOpen, setIsDocsModalOpen] = useState(false); // <--- NEW STATE
+  const [isDocsModalOpen, setIsDocsModalOpen] = useState(false);
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -109,7 +110,7 @@ const ResidentDashboard: React.FC = () => {
             <span className="link-text orange">Get Started <i className="fas fa-chevron-right"></i></span>
         </div>
 
-        {/* Card 2: Request Documents (UPDATED to open Modal) */}
+        {/* Card 2: Request Documents */}
         <div className="action-card" onClick={() => setIsDocsModalOpen(true)}>
             <div className="icon-circle green"><i className="fas fa-file-contract"></i></div>
             <h3>Request Documents</h3>
@@ -183,7 +184,7 @@ const ResidentDashboard: React.FC = () => {
           currentUser={user.name}
       />
 
-      {/* Documents Request Form (NEW) */}
+      {/* Documents Request Form */}
       <DocsRequestModal 
           isOpen={isDocsModalOpen}
           onClose={() => setIsDocsModalOpen(false)}
