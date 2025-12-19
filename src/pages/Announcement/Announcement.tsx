@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import './Announcement.css';
 import AddAnnouncementModal from './AddannouncementModal/addAnnouncementModal';
 
@@ -14,8 +14,8 @@ export interface AnnouncementData {
   date: string; 
   views: number;
   daysRemaining: string;
-  expires: string; // Formatted string
-  expiresAt?: string; // Raw date string for editing
+  expires: string; 
+  expiresAt?: string; 
   location?: string;
   eventTime?: string;
   organizer?: string;
@@ -42,7 +42,8 @@ interface ItemProps {
   onEdit: (item: AnnouncementData) => void; 
 }
 
-const AnnouncementItem: React.FC<ItemProps> = ({ data, onUpdate, onDelete, onArchive, onEdit }) => {
+// Removed 'onArchive' from destructuring below to fix TS6133
+const AnnouncementItem: React.FC<ItemProps> = ({ data, onUpdate, onDelete, onEdit }) => {
   const { id, title, description, imageUrl, isActive, primaryTag, secondaryTag, date, views, daysRemaining, expires } = data;
 
   return (
@@ -101,7 +102,8 @@ const AnnouncementItem: React.FC<ItemProps> = ({ data, onUpdate, onDelete, onArc
 // --- Main Component ---
 const Announcement: React.FC = () => {
   const [announcements, setAnnouncements] = useState<AnnouncementData[]>([]);
-  const [loading, setLoading] = useState(true);
+  // Removed 'loading' variable to fix TS6133 (kept setter)
+  const [, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   
   // NEW STATE: Tracks the item currently being edited
