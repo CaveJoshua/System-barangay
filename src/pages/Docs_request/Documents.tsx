@@ -17,6 +17,9 @@ interface DocumentsProps {
     initialData?: DocumentRequest[];
 }
 
+// --- FIXED: Use Live Backend URL ---
+const BASE_URL = "https://capstone1-project.onrender.com";
+
 export default function Documents({ initialData = [] }: DocumentsProps) {
     const navigate = useNavigate();
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -42,7 +45,8 @@ export default function Documents({ initialData = [] }: DocumentsProps) {
     const fetchDocuments = useCallback(async () => {
         setLoading(true);
         try {
-            const data = await apiFetch('http://localhost:5000/api/certificates');
+            // UPDATED URL
+            const data = await apiFetch(`${BASE_URL}/api/certificates`);
             const normalized = Array.isArray(data) ? data.map((item: any) => ({
                 ...item,
                 source: item.source === 'Walk-in' ? 'Walk-In' : item.source
@@ -70,7 +74,8 @@ export default function Documents({ initialData = [] }: DocumentsProps) {
         }
 
         try {
-            await apiFetch(`http://localhost:5000/api/certificates/${id}`, {
+            // UPDATED URL
+            await apiFetch(`${BASE_URL}/api/certificates/${id}`, {
                 method: "PUT",
                 body: JSON.stringify({ status: newStatus }),
             });
@@ -83,7 +88,8 @@ export default function Documents({ initialData = [] }: DocumentsProps) {
         try {
             // Soft Delete via PUT to 'Archived' (Or DELETE endpoint depending on backend logic)
             // Using PUT here to be safe as per your 'updateStatus' logic above
-            await apiFetch(`http://localhost:5000/api/certificates/${id}`, {
+            // UPDATED URL
+            await apiFetch(`${BASE_URL}/api/certificates/${id}`, {
                 method: "PUT",
                 body: JSON.stringify({ status: 'Archived' }),
             });
