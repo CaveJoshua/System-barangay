@@ -7,6 +7,9 @@ interface BlotterModalProps {
   currentUser: string; 
 }
 
+// --- FIXED: Use Live Backend URL ---
+const BASE_URL = "https://capstone1-project.onrender.com";
+
 const BlotterModal: React.FC<BlotterModalProps> = ({ isOpen, onClose, currentUser }) => {
   // --- Form State ---
   const [formData, setFormData] = useState({
@@ -16,8 +19,8 @@ const BlotterModal: React.FC<BlotterModalProps> = ({ isOpen, onClose, currentUse
     type: '',
     date: '',
     time: '',
-    zone: '',            // Changed: Dropdown for Zone
-    specificAddress: '', // Changed: Text input for address details
+    zone: '',            // Dropdown for Zone
+    specificAddress: '', // Text input for address details
     narrative: '',
   });
 
@@ -28,12 +31,15 @@ const BlotterModal: React.FC<BlotterModalProps> = ({ isOpen, onClose, currentUse
   // --- Effect: Check Daily Limit on Mount ---
   useEffect(() => {
     if (isOpen) {
+        // Auto-fill complainant name if provided
+        setFormData(prev => ({ ...prev, complainant: currentUser }));
+
         const today = new Date().toISOString().split('T')[0]; // Format: YYYY-MM-DD
         const storageKey = `blotter_requests_${today}`;
         const currentUsage = parseInt(localStorage.getItem(storageKey) || '0', 10);
         setDailyCount(currentUsage);
     }
-  }, [isOpen]);
+  }, [isOpen, currentUser]);
 
   if (!isOpen) return null;
 
@@ -71,7 +77,8 @@ const BlotterModal: React.FC<BlotterModalProps> = ({ isOpen, onClose, currentUse
       // Combine Zone and Address for the backend "location" field
       const combinedLocation = `${formData.zone} - ${formData.specificAddress}`;
 
-      const res = await fetch('http://localhost:5000/api/blotters', {
+      // --- FIXED: Use BASE_URL variable ---
+      const res = await fetch(`${BASE_URL}/api/blotters`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
