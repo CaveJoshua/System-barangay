@@ -7,6 +7,9 @@ interface BlotterModalProps {
   currentUser: string; // Auto-fills the Complainant Name
 }
 
+// --- FIXED: Use Live Backend URL ---
+const BASE_URL = "https://capstone1-project.onrender.com";
+
 const BlotterModal: React.FC<BlotterModalProps> = ({ isOpen, onClose, currentUser }) => {
   if (!isOpen) return null;
 
@@ -45,7 +48,8 @@ const BlotterModal: React.FC<BlotterModalProps> = ({ isOpen, onClose, currentUse
       // Combine Date & Time for the backend
       const combinedDateTime = `${formData.date} at ${formData.time}`;
 
-      const res = await fetch('http://localhost:5000/api/blotters', {
+      // --- FIXED: Use BASE_URL variable ---
+      const res = await fetch(`${BASE_URL}/api/blotters`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
