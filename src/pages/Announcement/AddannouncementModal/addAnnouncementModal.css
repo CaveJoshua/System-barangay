@@ -1,0 +1,216 @@
+/* --- MODAL STRUCTURE --- */
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: flex-start; /* Align modal near the top */
+  z-index: 1000;
+  padding-top: 50px; /* Space from the top */
+}
+
+.add-announcement-modal {
+  background-color: #ffffff;
+  border-radius: 8px;
+  width: 100%;
+  max-width: 500px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  padding: 24px;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+/* --- HEADER --- */
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #f0f0f0;
+  padding-bottom: 15px;
+  margin-bottom: 15px;
+}
+
+.modal-title {
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.modal-subtitle {
+    font-size: 13px;
+    color: #8c8c8c;
+    margin-top: -10px;
+    margin-bottom: 20px;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: #8c8c8c;
+}
+
+/* --- FORM ELEMENTS --- */
+.form-group {
+  margin-bottom: 18px;
+}
+
+.form-group label {
+  display: block;
+  font-weight: 500;
+  margin-bottom: 6px;
+  color: #262626;
+  font-size: 14px;
+}
+
+.form-group input[type="text"],
+.form-group input[type="url"],
+.form-group input[type="datetime-local"],
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #d9d9d9;
+  border-radius: 4px;
+  font-size: 14px;
+  box-sizing: border-box;
+  transition: border-color 0.2s;
+  background-color: white;
+  color: #262626;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  border-color: #1890ff;
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
+}
+
+.form-group textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+/* --- EXPIRATION TIME GROUP --- */
+.expiration-time-group {
+    padding: 15px;
+    border: 1px solid #bae0ff; /* Light blue border */
+    background-color: #e6f7ff; /* Very light blue background */
+    border-radius: 6px;
+}
+
+.expiration-header {
+    display: flex;
+    align-items: center;
+    font-weight: 600;
+    color: #1890ff;
+    margin-bottom: 4px;
+}
+
+.expiration-header i {
+    margin-right: 8px;
+}
+
+.expiration-subtitle {
+    font-size: 12px;
+    color: #595959;
+    margin-bottom: 10px;
+    margin-top: 0;
+}
+
+.custom-date-input {
+    margin-top: 10px;
+}
+
+/* --- STATUS RADIO GROUP --- */
+.radio-group {
+    padding-top: 5px;
+}
+
+.radio-group label {
+    font-weight: 500; /* Reset font weight for label text */
+    margin-bottom: 0;
+    font-size: 14px;
+}
+
+.radio-option {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 8px;
+}
+
+.radio-option input[type="radio"] {
+    margin-top: 4px;
+    margin-right: 8px;
+    flex-shrink: 0;
+}
+
+/* --- INLINE GROUP (Priority and Type) --- */
+.inline-group {
+  display: flex;
+  gap: 20px;
+}
+
+.inline-group .inline-field {
+  flex: 1;
+}
+
+/* --- ACTIONS --- */
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  padding-top: 20px;
+  border-top: 1px solid #f0f0f0;
+  margin-top: 20px;
+}
+
+.btn {
+  padding: 10px 15px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.2s;
+  border: 1px solid transparent;
+}
+
+.btn-cancel {
+  background-color: #ffffff;
+  color: #595959;
+  border-color: #d9d9d9;
+}
+
+.btn-cancel:hover {
+  background-color: #f5f5f5;
+}
+
+.btn-primary {
+  background-color: #000000; /* Black button color from image */
+  color: #ffffff;
+}
+
+.btn-primary:hover {
+  background-color: #333333;
+}
+
+.btn[disabled] {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* --- ERROR ALERT --- */
+.alert-error {
+    padding: 10px;
+    margin-bottom: 15px;
+    background-color: #fff1f0;
+    color: #ff4d4f;
+    border: 1px solid #ffa39e;
+    border-radius: 4px;
+    font-size: 14px;
+}

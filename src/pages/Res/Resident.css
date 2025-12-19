@@ -1,0 +1,350 @@
+/* =========================================
+   RESIDENT DATABASE STYLES (Scoped to .residents-dashboard-wrapper)
+   Add to App.css or index.css
+   ========================================= */
+
+/* --- 1. SCOPED WRAPPER --- */
+/* This ensures these variables/styles only affect the Residents page */
+.residents-dashboard-wrapper {
+  --res-primary: #4f46e5;       /* Indigo 600 */
+  --res-primary-hover: #4338ca; /* Indigo 700 */
+  --res-bg-page: #f9fafb;       /* Cool Gray 50 */
+  --res-bg-card: #ffffff;
+  --res-text-main: #111827;     /* Gray 900 */
+  --res-text-muted: #6b7280;    /* Gray 500 */
+  --res-border: #e5e7eb;        /* Gray 200 */
+  --res-danger: #ef4444;
+
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  color: var(--res-text-main);
+  background-color: var(--res-bg-page);
+  width: 100%;
+  
+  /* UPDATED: Added min-height and increased bottom padding to prevent cutoff */
+  min-height: 100vh;
+  padding: 24px 24px 80px 24px; 
+  box-sizing: border-box;
+  overflow-x: scroll;
+}
+
+/* Force box-sizing for all children */
+.residents-dashboard-wrapper *,
+.residents-dashboard-wrapper *::before,
+.residents-dashboard-wrapper *::after {
+  box-sizing: border-box;
+}
+
+/* --- 2. HEADER SECTION --- */
+.residents-dashboard-wrapper .page-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.residents-dashboard-wrapper .page-header-row h1 {
+  font-size: 24px;
+  font-weight: 700;
+  margin: 0 0 4px 0;
+  color: var(--res-text-main);
+  letter-spacing: -0.02em;
+}
+
+.residents-dashboard-wrapper .page-subtitle {
+  color: var(--res-text-muted);
+  margin-top: 4px;
+  font-size: 14px;
+  margin-bottom: 0;
+}
+
+.residents-dashboard-wrapper .header-actions {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+/* --- BUTTONS --- */
+.residents-dashboard-wrapper .btn {
+  height: 38px;
+  padding: 0 16px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.2s ease;
+  border: 1px solid transparent;
+
+}
+
+.residents-dashboard-wrapper .btn-black {
+  background: #111827;
+  color: white;
+  border-color: #111827;
+}
+.residents-dashboard-wrapper .btn-black:hover { 
+  background: #374151; 
+  transform: translateY(-1px); 
+}
+
+.residents-dashboard-wrapper .btn-white {
+  background: white;
+  color: #374151;
+  border-color: #d1d5db;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+}
+.residents-dashboard-wrapper .btn-white:hover { 
+  background: #f9fafb; 
+  border-color: #9ca3af; 
+  color: #111827; 
+}
+
+.residents-dashboard-wrapper .btn-danger-outline {
+  background: white;
+  color: var(--res-danger);
+  border-color: #fecaca;
+}
+.residents-dashboard-wrapper .btn-danger-outline:hover { 
+  background: #fef2f2; 
+  border-color: var(--res-danger); 
+}
+
+/* --- 3. MAIN CARD --- */
+.residents-dashboard-wrapper .table-card {
+  background: var(--res-bg-card);
+  border: 1px solid var(--res-border);
+  border-radius: 12px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden; 
+  width: 100%;
+}
+
+/* --- 4. TABS --- */
+.residents-dashboard-wrapper .tabs-container {
+  display: flex;
+  gap: 32px;
+  padding: 0 24px;
+  border-bottom: none; 
+  background: #ffffff;
+}
+
+.residents-dashboard-wrapper .tab-btn {
+  background: none;
+  border: none;        /* Removes the button border */
+  outline: none;       /* Removes the focus outline (blue/black ring) */
+  box-shadow: none;    /* Ensures no shadow outlines */
+  padding: 16px 0;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--res-text-muted);
+  cursor: pointer;
+  position: relative;
+}
+
+.residents-dashboard-wrapper .tab-btn:hover { 
+  color: var(--res-primary); 
+}
+
+.residents-dashboard-wrapper .badge {
+  background: #f3f4f6;
+  color: var(--res-text-muted);
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 12px;
+  margin-left: 8px;
+  font-weight: 600;
+}
+
+
+/* --- 5. TOOLBAR --- */
+.residents-dashboard-wrapper .toolbar {
+  padding: 16px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #ffffff;
+  border-bottom: 1px solid var(--res-border);
+  flex-wrap: wrap; 
+  gap: 12px;
+}
+
+.residents-dashboard-wrapper .search-container {
+  position: relative;
+  width: 300px;
+}
+.residents-dashboard-wrapper .search-icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #9ca3af;
+  font-size: 14px;
+  pointer-events: none;
+}
+.residents-dashboard-wrapper .search-input {
+  width: 100%;
+  height: 38px;
+  padding: 0 10px 0 36px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 14px;
+  outline: none;
+  transition: all 0.2s;
+  background-color: white;
+  color: #374151;
+}
+.residents-dashboard-wrapper .search-input:focus {
+  border-color: var(--res-primary);
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+}
+
+.residents-dashboard-wrapper .filter-select {
+  height: 38px;
+  padding: 0 32px 0 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  background-color: white;
+  font-size: 13px;
+  color: #374151;
+  outline: none;
+}
+.residents-dashboard-wrapper .filter-select:focus { 
+  border-color: var(--res-primary); 
+}
+
+/* --- 6. TABLE --- */
+.residents-dashboard-wrapper .table-scroll {
+  width: 100%;
+}
+
+.residents-dashboard-wrapper table {
+  width: 100%;
+  border-collapse: collapse;
+  white-space: nowrap;
+}
+
+.residents-dashboard-wrapper thead { 
+  background: #f9fafb; 
+}
+
+.residents-dashboard-wrapper th {
+  text-align: left;
+  padding: 12px 24px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: #6b7280;
+  border-bottom: 1px solid var(--res-border);
+}
+
+.residents-dashboard-wrapper td {
+  padding: 16px 24px;
+  font-size: 14px;
+  color: #111827;
+  border-bottom: 1px solid #f3f4f6;
+  vertical-align: middle;
+}
+
+.residents-dashboard-wrapper tr:last-child td { border-bottom: none; }
+.residents-dashboard-wrapper tr:hover td { background-color: #f9fafb; }
+
+.residents-dashboard-wrapper .col-name { font-weight: 500; }
+
+.residents-dashboard-wrapper .avatar-circle {
+  width: 32px; 
+  height: 32px;
+  border-radius: 50%;
+  background: #e0e7ff;
+  color: #4338ca;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+/* Badges */
+.residents-dashboard-wrapper .status-badge {
+  display: inline-flex;
+  padding: 2px 10px;
+  border-radius: 99px;
+  font-size: 12px;
+  font-weight: 600;
+}
+.residents-dashboard-wrapper .status-badge.senior { background: #fef3c7; color: #92400e; }
+.residents-dashboard-wrapper .status-badge.minor { background: #dbeafe; color: #1e40af; }
+.residents-dashboard-wrapper .status-badge.adult { background: #f3f4f6; color: #374151; }
+.residents-dashboard-wrapper .status-badge.unknown { background: #f3f4f6; color: #374151; }
+
+/* Actions */
+.residents-dashboard-wrapper .actions-cell {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+.residents-dashboard-wrapper .btn-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  border: none;
+  background: transparent;
+  color: #6b7280;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.residents-dashboard-wrapper .btn-icon:hover { background: #f3f4f6; color: var(--res-primary); }
+.residents-dashboard-wrapper .btn-icon.delete:hover { background: #fef2f2; color: var(--res-danger); }
+
+/* --- 7. PAGINATION --- */
+.residents-dashboard-wrapper .pagination {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 24px;
+  border-top: 1px solid var(--res-border);
+  background: #ffffff;
+  margin-top: 10px;
+}
+
+.residents-dashboard-wrapper .page-btn {
+  background: white;
+  border: 1px solid #d1d5db;
+  color: #374151;
+  padding: 8px 14px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex; 
+  align-items: center; 
+  gap: 6px;
+}
+.residents-dashboard-wrapper .page-btn:disabled {
+  background: #f3f4f6;
+  color: #9ca3af;
+  border-color: #e5e7eb;
+  cursor: not-allowed;
+}
+
+.residents-dashboard-wrapper .empty-state {
+  text-align: center;
+  padding: 40px !important;
+  color: var(--res-text-muted);
+}
+
+/* --- 8. ANIMATIONS --- */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}

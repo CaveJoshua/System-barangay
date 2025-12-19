@@ -1,0 +1,239 @@
+/* AuditLog.css */
+
+.auditlog-body {
+  padding: 24px;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  background-color: #f3f4f6; /* Lighter, cleaner background */
+  min-height: 100vh;
+}
+
+/* --- HEADER SECTION --- */
+.auditlog-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 24px;
+}
+
+.auditlog-title {
+  font-size: 26px;
+  font-weight: 700;
+  margin: 0 0 6px 0;
+  color: #111827;
+  letter-spacing: -0.5px;
+}
+
+.auditlog-subtitle {
+  color: #6b7280;
+  margin: 0;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.auditlog-header-actions {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+/* --- BUTTONS --- */
+.auditlog-btn {
+  height: 40px;
+  padding: 0 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  border: 1px solid transparent;
+  font-size: 14px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s ease;
+}
+
+.auditlog-btn-white {
+  background: #ffffff;
+  color: #374151;
+  border-color: #d1d5db;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+}
+.auditlog-btn-white:hover {
+  background: #f9fafb;
+  border-color: #9ca3af;
+}
+.auditlog-btn-white:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.auditlog-btn-black {
+  background: #111827;
+  color: #ffffff;
+}
+.auditlog-btn-black:hover {
+  background: #000000;
+  transform: translateY(-1px);
+}
+
+/* --- FILTERS --- */
+.auditlog-filters {
+  margin-bottom: 16px;
+  display: flex;
+  gap: 12px;
+}
+
+.search-input {
+  height: 40px;
+  padding: 0 12px;
+  font-size: 14px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  width: 320px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.search-input:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+/* --- TABLE CARD --- */
+.auditlog-table-card {
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  overflow: hidden;
+  border: 1px solid #e5e7eb;
+}
+
+.auditlog-card-header {
+  padding: 16px 20px;
+  border-bottom: 1px solid #e5e7eb;
+  background: #f9fafb;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.auditlog-card-header h3 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: #374151;
+}
+
+/* --- TABLE STYLES --- */
+.auditlog-table-scroll {
+  max-height: 600px;
+  overflow-y: auto;
+}
+
+.auditlog-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.auditlog-table thead {
+  background: #f9fafb;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.auditlog-table th {
+  padding: 12px 16px;
+  text-align: left;
+  font-weight: 600;
+  color: #6b7280;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.auditlog-table td {
+  padding: 14px 16px;
+  border-bottom: 1px solid #f3f4f6;
+  color: #1f2937;
+  vertical-align: middle;
+}
+
+.auditlog-table tbody tr:hover {
+  background-color: #f9fafb;
+}
+
+/* Column Widths */
+.auditlog-col-ts { width: 180px; font-variant-numeric: tabular-nums; color: #6b7280 !important; font-size: 13px; }
+.auditlog-col-user { width: 140px; font-weight: 500; }
+.auditlog-col-action { width: 130px; }
+.auditlog-col-module { width: 140px; color: #4b5563; }
+.auditlog-col-desc { min-width: 250px; }
+.auditlog-col-hash { width: 200px; }
+
+/* --- BADGES (Action Colors) --- */
+.auditlog-badge {
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  display: inline-block;
+  letter-spacing: 0.3px;
+}
+
+/* Default */
+.auditlog-badge { background: #f3f4f6; color: #374151; border: 1px solid #e5e7eb; }
+
+/* Specific Actions */
+.auditlog-badge.login { background: #eff6ff; color: #2563eb; border-color: #dbeafe; }
+.auditlog-badge.create { background: #ecfdf5; color: #059669; border-color: #d1fae5; }
+.auditlog-badge.update { background: #fffbeb; color: #d97706; border-color: #fef3c7; }
+.auditlog-badge.delete { background: #fef2f2; color: #dc2626; border-color: #fee2e2; }
+.auditlog-badge.archive { background: #f5f3ff; color: #7c3aed; border-color: #ede9fe; }
+
+/* --- INFO CARD --- */
+.auditlog-info-card {
+  margin-top: 24px;
+  padding: 20px;
+  background: white;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+}
+.auditlog-info-card h3 {
+  margin: 0 0 8px 0;
+  font-size: 16px;
+  color: #111827;
+}
+.auditlog-info-card p {
+  margin: 0;
+  font-size: 14px;
+  color: #6b7280;
+  line-height: 1.5;
+}
+
+/* --- EMPTY STATE --- */
+.auditlog-empty {
+  text-align: center;
+  color: #9ca3af;
+  padding: 40px 0;
+  font-style: italic;
+}
+
+/* --- SCROLLBAR --- */
+.auditlog-table-scroll::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+.auditlog-table-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+.auditlog-table-scroll::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 4px;
+}
+.auditlog-table-scroll::-webkit-scrollbar-thumb:hover {
+  background: #9ca3af;
+}

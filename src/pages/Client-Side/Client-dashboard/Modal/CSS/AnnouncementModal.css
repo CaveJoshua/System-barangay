@@ -1,0 +1,125 @@
+/* --- Modal Overlay --- */
+.Anc-overlay {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); 
+    z-index: 9999;
+    display: flex; justify-content: center; align-items: center;
+    padding: 20px;
+    backdrop-filter: blur(3px);
+}
+
+/* --- Modal Container --- */
+.Anc-container {
+    background: white;
+    width: 100%; max-width: 700px;
+    border-radius: 12px;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    display: flex; flex-direction: column;
+    max-height: 90vh; /* Allows scrolling for tall content */
+    overflow-y: auto;
+    animation: Anc-FadeIn 0.2s ease-out;
+    font-family: 'Inter', sans-serif;
+}
+
+@keyframes Anc-FadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* --- Header --- */
+.Anc-header {
+    padding: 24px 24px 10px 24px;
+    display: flex; justify-content: space-between; align-items: flex-start;
+}
+.Anc-header h2 {
+    margin: 0; font-size: 1.5rem; font-weight: 800; color: #1e293b;
+    line-height: 1.2;
+}
+.Anc-close-icon {
+    background: none; border: none; font-size: 1.5rem; color: #94a3b8;
+    cursor: pointer; line-height: 1;
+}
+.Anc-close-icon:hover { color: #ef4444; }
+
+/* --- Badges --- */
+.Anc-badges {
+    padding: 0 24px 20px 24px;
+    display: flex; gap: 10px; flex-wrap: wrap;
+}
+.Anc-badge {
+    font-size: 0.75rem; font-weight: 700; padding: 4px 10px; border-radius: 4px;
+    text-transform: uppercase; display: inline-flex; align-items: center; gap: 5px;
+}
+.Anc-badge.featured { background: #fef9c3; color: #854d0e; border: 1px solid #fde047; }
+.Anc-badge.date { background: #eff6ff; color: #1e40af; border: 1px solid #bfdbfe; }
+
+/* Dynamic Colors */
+.Anc-badge.HIGH { background: #fee2e2; color: #991b1b; border: 1px solid #fecaca; }
+.Anc-badge.MEDIUM { background: #ffedd5; color: #9a3412; border: 1px solid #fed7aa; }
+.Anc-badge.LOW { background: #dbeafe; color: #1e40af; border: 1px solid #bfdbfe; }
+
+/* --- Hero Image (BIGGER SIZE) --- */
+.Anc-image-wrapper {
+    width: 100%;
+    height: 450px; /* <--- This makes it big like the picture */
+    padding: 0 24px;
+    box-sizing: border-box;
+    margin-bottom: 20px;
+}
+.Anc-hero-img {
+    width: 100%; height: 100%; border-radius: 8px;
+    background-size: cover; background-position: center;
+}
+.Anc-hero-placeholder {
+    width: 100%; height: 100%; border-radius: 8px;
+    background-color: #e2e8f0; display: flex; align-items: center; justify-content: center;
+    font-size: 3rem; color: #94a3b8;
+}
+
+/* --- Info Grid --- */
+.Anc-info-box {
+    margin: 0 24px 20px 24px;
+    background-color: #f8fafc;
+    border-radius: 8px;
+    padding: 20px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.Anc-info-item { display: flex; align-items: center; gap: 12px; }
+.Anc-info-item.full-width { grid-column: 1 / -1; }
+
+.Anc-icon {
+    width: 40px; height: 40px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center; font-size: 1.1rem;
+    flex-shrink: 0;
+}
+.Anc-icon.blue { background: #dbeafe; color: #2563eb; }
+.Anc-icon.green { background: #dcfce7; color: #16a34a; }
+.Anc-icon.purple { background: #f3e8ff; color: #9333ea; }
+
+.Anc-info-text { display: flex; flex-direction: column; }
+.Anc-info-text .label { font-size: 0.7rem; font-weight: 700; color: #94a3b8; letter-spacing: 0.5px; }
+.Anc-info-text .value { font-size: 0.9rem; font-weight: 600; color: #334155; }
+
+/* --- Body Text --- */
+.Anc-body { padding: 0 24px 20px 24px; color: #334155; line-height: 1.6; }
+.Anc-body h3 { font-size: 1.1rem; font-weight: 700; color: #0f172a; margin: 0 0 8px 0; }
+.Anc-body p { margin: 0 0 20px 0; font-size: 0.95rem; }
+
+/* --- Footer --- */
+.Anc-footer {
+    padding: 15px 24px; border-top: 1px solid #e2e8f0;
+    display: flex; justify-content: flex-end;
+    background: white;
+    position: sticky;
+    bottom: 0;
+}
+.Anc-close-btn {
+    background-color: #3b82f6; color: white;
+    border: none; padding: 10px 24px; border-radius: 6px;
+    font-weight: 600; cursor: pointer;
+    transition: background 0.2s;
+}
+.Anc-close-btn:hover { background-color: #2563eb; }

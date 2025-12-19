@@ -1,0 +1,180 @@
+.drm-overlay {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+    backdrop-filter: blur(3px);
+}
+
+.drm-container {
+    background: #fff;
+    width: 450px;
+    max-width: 90%;
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+    font-family: 'Inter', sans-serif;
+    position: relative;
+}
+
+/* Header */
+.drm-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.drm-icon-wrapper {
+    width: 42px; height: 42px;
+    background: #E8F5E9; /* Light Green */
+    color: #2E7D32;      /* Dark Green */
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    flex-shrink: 0;
+}
+
+.drm-header-text h2 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #111;
+    margin: 0 0 4px 0;
+}
+
+.drm-header-text p {
+    font-size: 0.75rem;
+    color: #666;
+    margin: 0;
+}
+
+.drm-close-icon {
+    margin-left: auto;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: #999;
+    cursor: pointer;
+    line-height: 1;
+}
+
+/* Form */
+.drm-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.drm-row {
+    display: flex;
+    gap: 12px;
+}
+
+.drm-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    flex: 1;
+}
+
+.drm-group.small {
+    flex: 0 0 80px; /* Smaller width for Age */
+}
+
+.drm-group label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #444;
+}
+
+.req { color: #D32F2F; }
+
+.drm-input, .drm-select, .drm-textarea {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    color: #333;
+    width: 100%;
+    box-sizing: border-box;
+    background-color: white;
+}
+
+.drm-input:focus, .drm-select:focus, .drm-textarea:focus {
+    border-color: #2E7D32; /* Green focus */
+    outline: none;
+    background-color: white;
+}
+
+.drm-input.readonly {
+    background-color: #f9f9f9;
+    color: #777;
+    cursor: default;
+}
+
+.drm-textarea {
+    min-height: 80px;
+    resize: vertical;
+}
+
+/* Info Box */
+.drm-info-box {
+    background: #E3F2FD; /* Blue info bg */
+    border: 1px solid #BBDEFB;
+    border-radius: 6px;
+    padding: 12px;
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 0.75rem;
+    color: #0D47A1;
+    line-height: 1.4;
+}
+
+/* Actions */
+.drm-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.drm-submit-btn {
+    flex: 1;
+    background: #2E7D32; /* Main Green */
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.drm-submit-btn:hover:not(:disabled) {
+    background: #1B5E20;
+}
+
+.drm-submit-btn:disabled {
+    background: #A5D6A7;
+    cursor: not-allowed;
+}
+
+.drm-cancel-btn {
+    background: transparent;
+    border: 1px solid #ddd;
+    padding: 12px 20px;
+    border-radius: 6px;
+    font-weight: 600;
+    color: #555;
+    cursor: pointer;
+}
+
+.drm-cancel-btn:hover {
+    background: #f5f5f5;
+}

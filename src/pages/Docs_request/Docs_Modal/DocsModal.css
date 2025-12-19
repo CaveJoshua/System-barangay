@@ -1,0 +1,75 @@
+/* =========================================
+   DOCS MODAL STYLING (FIXED)
+   ========================================= */
+
+/* 1. ICON WRAPPER (Keeps icon inside input) */
+.input-icon-wrapper {
+  position: relative;
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+
+/* 2. THE ICON ITSELF (Vertically Centered) */
+.input-icon {
+  position: absolute;
+  left: 12px; /* Space from left edge */
+  top: 50%;   /* Move down 50% */
+  transform: translateY(-50%); /* Pull back up 50% to center perfectly */
+  color: #888;
+  font-size: 14px;
+  pointer-events: none; /* Let clicks pass through */
+  z-index: 5;
+}
+
+/* 3. INPUT PADDING (Make room for icon) */
+.form-input.with-icon {
+  padding-left: 38px !important; /* Push text to the right */
+}
+
+/* 4. DASHED BOX (ID Section) */
+.verification-box {
+  border: 2px dashed #ccc;
+  background-color: #f9f9f9;
+  padding: 15px;
+  border-radius: 8px;
+  margin-top: 15px;
+}
+
+/* 5. GENERAL INPUT FIXES */
+.form-input {
+  height: 40px; /* Consistent height */
+  background-color: #ccc;
+  border-radius: 6px;
+  border: 1px solid #d9d9d9;
+  font-size: 14px;
+  width: 100%;
+  box-sizing: border-box; /* Prevents width overflow */
+  transition: all 0.2s;
+}
+
+.form-input:focus {
+  border-color: #000;
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(0,0,0,0.05);
+}
+
+.purpose-textarea {
+  width: 100%;
+  height: 100px;
+  padding: 12px;
+  border: 1px solid #d9d9d9;
+  border-radius: 6px;
+  background-color: #ffffff; /* FORCE WHITE */
+  color: #333333;            /* FORCE DARK TEXT */
+  font-family: inherit;
+  font-size: 14px;
+  resize: none;
+  outline: none;
+}
+
+/* Optional: prevent external themes from overriding */
+.purpose-textarea {
+  background-color: #ffffff !important;
+  color: #333333 !important;
+}

@@ -1,0 +1,123 @@
+/* =========================================
+   11. MODAL FLOATING WINDOW STYLES
+   ========================================= */
+
+/* 1. The Dark Backdrop (Overlay) */
+.modal-overlay {
+  position: fixed;       /* Locks it to the screen */
+  top: 0;
+  left: 0;
+  width: 100vw;          /* Covers full width */
+  height: 100vh;         /* Covers full height */
+  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black */
+  display: flex;         /* Enables centering */
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;         /* Sits on top of Sidebar (z-index: 10) */
+  backdrop-filter: blur(3px); /* Optional: Blurs the background slightly */
+  animation: fadeIn 0.2s ease-out;
+}
+
+/* 2. The Floating Window (White Box) */
+.modal-content {
+  background: #ffffff;
+  width: 800px;
+  max-width: 95%;
+  max-height: 90vh;      /* Prevents it from being taller than the screen */
+  border-radius: 10px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); /* Deep shadow for "floating" effect */
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;      /* Keeps content inside rounded corners */
+  position: relative;
+  animation: slideUp 0.3s ease-out;
+}
+
+/* Animations for smooth entry */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* 3. Header (Fixed at top of modal) */
+.modal-header {
+  padding: 20px 30px;
+  border-bottom: 1px solid #e0e0e0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #fff;
+}
+.modal-header h2 { margin: 0; font-size: 20px; font-weight: 700; color: #333; }
+
+.close-btn {
+  background: transparent;
+  border: none;
+  font-size: 28px;
+  line-height: 1;
+  cursor: pointer;
+  color: #999;
+  transition: color 0.2s;
+}
+.close-btn:hover { color: #ff4d4f; }
+
+/* 4. Scrollable Body (Middle part) */
+.modal-body {
+  padding: 30px;
+  overflow-y: auto; /* Only this part scrolls */
+  background-color: #ffffff;
+}
+
+/* 5. Form Grid Layouts */
+.row-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-bottom: 16px;
+}
+.row-3 {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 20px;
+  margin-bottom: 16px;
+}
+.form-group { display: flex; flex-direction: column; margin-bottom: 16px; }
+.modal-body label {
+  font-size: 13px; font-weight: 600; margin-bottom: 6px; color: #555;
+}
+.modal-body input, .modal-body select {
+  padding: 10px 12px; border: 1px solid #d9d9d9; border-radius: 5px;
+  font-size: 14px; outline: none; background: #fff; color: #333;
+}
+.modal-body input:focus, .modal-body select:focus {
+  border-color: #1890ff; box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.1);
+}
+
+/* Section Titles */
+.section-title {
+  font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;
+  color: #1890ff; margin: 24px 0 16px 0; border-bottom: 1px solid #f0f0f0; padding-bottom: 8px;
+}
+
+/* Checkboxes */
+.checkbox-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
+  background: #fafafa; padding: 15px; border: 1px solid #eee; border-radius: 6px;
+}
+.checkbox-item { display: flex; align-items: center; gap: 10px; font-size: 13px; color: #444; cursor: pointer; }
+.checkbox-item input { width: 16px; height: 16px; cursor: pointer; accent-color: #1890ff; }
+
+/* 6. Footer (Fixed at bottom of modal) */
+.modal-footer {
+  padding: 20px 30px;
+  border-top: 1px solid #e0e0e0;
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  background-color: #f9f9f9;
+}

@@ -1,0 +1,155 @@
+/* =========================================
+   1. GLOBAL LAYOUT
+   ========================================= */
+.Rsd-layout-container {
+    font-family: 'Inter', sans-serif;
+    background-color: #f8fafc; /* Light Gray Background */
+    min-height: 100vh;
+    padding: 40px 20px;
+    box-sizing: border-box;
+    color: #1e293b;
+    overflow-y: auto;
+}
+
+/* Loading Spinner */
+.Rsd-loading-screen { display: flex; justify-content: center; align-items: center; height: 100vh; }
+.spinner { border: 3px solid #e2e8f0; border-top: 3px solid #3b82f6; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; }
+@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+/* =========================================
+   2. HEADER
+   ========================================= */
+.Rsd-header { text-align: center; margin-bottom: 60px; margin-top: 20px; }
+.Rsd-header h1 { font-size: 2.2rem; font-weight: 800; color: #0f172a; margin: 0 0 10px 0; }
+.Rsd-header p { color: #64748b; font-size: 1.1rem; }
+
+/* =========================================
+   3. QUICK ACCESS SERVICES (The Big Two Cards)
+   ========================================= */
+.Rsd-quick-actions {
+    max-width: 1100px;
+    margin: 0 auto 80px auto;
+    /* Forces exactly 2 columns side-by-side */
+    display: grid;
+    grid-template-columns: 1fr 1fr; 
+    gap: 30px;
+}
+
+/* Mobile responsive: Stack them on small screens */
+@media (max-width: 768px) {
+    .Rsd-quick-actions { grid-template-columns: 1fr; }
+}
+
+.action-card {
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    /* Large padding to match the "Big Button" look */
+    padding: 50px 30px; 
+    text-align: center;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 250px; /* Ensures they look substantial */
+}
+
+.action-card:hover { 
+    transform: translateY(-5px); 
+    box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); 
+    border-color: #cbd5e1;
+}
+
+/* The Colored Circles */
+.icon-circle {
+    width: 70px; height: 70px; border-radius: 12px; 
+    display: flex; align-items: center; justify-content: center;
+    font-size: 2rem; margin-bottom: 20px;
+}
+.icon-circle.orange { background: #ffedd5; color: #f97316; }
+.icon-circle.green { background: #dcfce7; color: #22c55e; }
+
+.action-card span { 
+    font-weight: 700; 
+    font-size: 1.2rem; 
+    color: #1e293b; 
+}
+
+.Rsd-divider { 
+    height: 1px; background: #e2e8f0; 
+    max-width: 1100px; margin: 0 auto 60px auto; 
+}
+
+/* =========================================
+   4. ANNOUNCEMENTS (Featured + Grid)
+   ========================================= */
+.Rsd-feed { max-width: 1100px; margin: 0 auto 60px auto; }
+
+.feed-header { text-align: left; margin-bottom: 30px; }
+.feed-header h3 { 
+    font-size: 1.5rem; font-weight: 800; color: #0f172a; margin: 0; 
+    border-bottom: 2px solid #e2e8f0; padding-bottom: 10px; display: inline-block;
+}
+
+/* Images & Placeholders */
+.card-img { background-size: cover; background-position: center; width: 100%; }
+.card-img.hero { height: 280px; }
+.card-img.grid { height: 180px; }
+
+.card-placeholder {
+    width: 100%; background-color: #e2e8f0;
+    display: flex; align-items: center; justify-content: center;
+    color: #94a3b8;
+}
+.card-placeholder.hero { height: 280px; font-size: 3rem; }
+.card-placeholder.grid { height: 180px; font-size: 2rem; }
+
+/* FEATURED CARD */
+.featured-card {
+    background: white; border-radius: 16px; overflow: hidden;
+    border: 1px solid #e2e8f0; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+    margin-bottom: 30px; cursor: pointer; transition: transform 0.2s;
+    display: flex; flex-direction: column;
+}
+.featured-card:hover { transform: translateY(-3px); box-shadow: 0 15px 20px -5px rgba(0,0,0,0.1); }
+
+.featured-media { position: relative; width: 100%; }
+.badges-float { position: absolute; top: 20px; left: 20px; display: flex; gap: 10px; }
+
+.featured-info { padding: 30px; }
+.featured-info h2 { font-size: 1.6rem; font-weight: 800; color: #1e293b; margin: 0 0 10px 0; }
+.featured-info p { color: #64748b; font-size: 1.05rem; margin: 0 0 20px 0; line-height: 1.6; }
+
+.meta-date { font-size: 0.85rem; color: #94a3b8; font-weight: 600; display: flex; align-items: center; gap: 5px; }
+
+/* GRID CARDS (3 Columns) */
+.grid-cards {
+    display: grid;
+    /* Fits 3 items perfectly */
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+}
+
+.grid-card {
+    background: white; border-radius: 12px; overflow: hidden;
+    border: 1px solid #e2e8f0; box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    cursor: pointer; transition: transform 0.2s; display: flex; flex-direction: column;
+}
+.grid-card:hover { transform: translateY(-3px); box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); }
+
+.grid-media { position: relative; width: 100%; }
+.grid-info { padding: 20px; flex: 1; display: flex; flex-direction: column; }
+.grid-info h4 { font-size: 1.1rem; font-weight: 700; color: #1e293b; margin: 0 0 10px 0; }
+.grid-info p { color: #64748b; font-size: 0.9rem; margin: 0 0 15px 0; flex: 1; }
+
+/* =========================================
+   5. BADGES & UTILS
+   ========================================= */
+.badge { padding: 5px 12px; border-radius: 6px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: white; display: inline-flex; align-items: center; gap: 5px; }
+.badge-gold { background: #fcd34d; color: #78350f; }
+.badge-HIGH { background: #ef4444; } .badge-MEDIUM { background: #f97316; } .badge-LOW { background: #3b82f6; }
+
+.empty-state { text-align: center; color: #94a3b8; padding: 40px; border: 1px dashed #e2e8f0; border-radius: 8px; }

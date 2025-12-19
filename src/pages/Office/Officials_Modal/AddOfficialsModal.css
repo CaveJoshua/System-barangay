@@ -1,0 +1,63 @@
+/* =========================================
+   OFFICIALS TABLE ACTIONS (FINAL POLISH)
+   ========================================= */
+
+/* 1. Target the Table Cell to center everything */
+.resident-table td:last-child {
+  text-align: center; /* Horizontally center the content */
+  width: 140px;       /* Fixed width to prevent squashing */
+  vertical-align: middle;
+}
+
+/* 2. The Container: perfectly centered flexbox */
+.action-buttons {
+  display: flex;
+  align-items: center;
+  justify-content: center; /* Centers the buttons within the cell */
+  gap: 12px;               /* Clean spacing between Edit and Delete */
+}
+
+/* 3. Base Button Style - Larger & cleaner */
+.action-btn {
+  width: 38px;  
+  height: 38px;
+  border-radius: 8px; /* Modern rounded corners (squircle) */
+  border: 1px solid transparent; 
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  font-size: 16px; 
+  background-color: white; 
+}
+
+/* 4. Edit Button (Blue Theme) */
+.edit-btn {
+  background-color: #f0f5ff; /* Crisp light blue */
+  color: #2f54eb;            /* Deep readable blue */
+  border: 1px solid #adc6ff; 
+}
+
+.edit-btn:hover {
+  background-color: #2f54eb; 
+  color: #ffffff;
+  border-color: #2f54eb;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(47, 84, 235, 0.2); 
+}
+
+/* 5. Delete Button (Red Theme) */
+.delete-btn {
+  background-color: #fff1f0; /* Crisp light red */
+  color: #f5222d;            /* Deep readable red */
+  border: 1px solid #ffa39e; 
+}
+
+.delete-btn:hover {
+  background-color: #f5222d; 
+  color: #ffffff;
+  border-color: #f5222d;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(245, 34, 45, 0.2); 
+}
