@@ -1,4 +1,3 @@
-// src/pages/Residents/useResidents.ts
 import { useState, useEffect, useMemo, useRef } from 'react';
 
 // 1. UPDATED INTERFACE (Includes new fields)
@@ -21,6 +20,9 @@ export interface Resident {
   is4Ps?: boolean;
   isFarmer?: boolean;
 }
+
+// --- FIXED: Use Live Backend URL ---
+const BASE_URL = "https://capstone1-project.onrender.com";
 
 export const useResidents = (initialData: Resident[] = []) => {
   const [residents, setResidents] = useState<Resident[]>(initialData);
@@ -63,7 +65,8 @@ export const useResidents = (initialData: Resident[] = []) => {
   const fetchResidents = async () => {
     setLoading(true);
     try {
-      const data = await apiFetch('http://localhost:5000/api/residents');
+      // UPDATED URL
+      const data = await apiFetch(`${BASE_URL}/api/residents`);
       setResidents(Array.isArray(data) ? data : []);
       setError(null);
     } catch (err: any) {
@@ -88,7 +91,8 @@ export const useResidents = (initialData: Resident[] = []) => {
   const handleDelete = async (id: string) => {
     if (!window.confirm("Are you sure?")) return;
     try {
-      await apiFetch(`http://localhost:5000/api/residents/${id}`, { method: 'DELETE' });
+      // UPDATED URL
+      await apiFetch(`${BASE_URL}/api/residents/${id}`, { method: 'DELETE' });
       setResidents(prev => prev.filter(r => r._id !== id));
     } catch (err: any) {
       alert("Delete failed: " + err.message);
@@ -131,8 +135,6 @@ export const useResidents = (initialData: Resident[] = []) => {
   // Import Trigger
   const triggerImport = () => fileInputRef.current?.click();
 
-  // (The actual handleFileUpload logic is handled inside Residents.tsx via the Smart Scanner now, 
-  // but we keep a basic handler here for compatibility if passed down)
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
      // Logic now lives in Residents.tsx for the smart scanner
   };
@@ -209,7 +211,7 @@ export const useResidents = (initialData: Resident[] = []) => {
         return acc;
       }, { male: 0, female: 0, unknown: 0 })
     };
-  }, [processedResidents]); // <--- THIS DEPENDENCY CHANGE IS THE KEY
+  }, [processedResidents]); 
 
   return {
     residents, loading, error, importing,
