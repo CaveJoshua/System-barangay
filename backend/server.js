@@ -115,10 +115,25 @@ const sendEmail = async (to, subject, htmlContent) => {
 app.use(helmet());
 app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }));
 
+// --- UPDATED CORS CONFIGURATION ---
+const allowedOrigins = [
+  'http://localhost:5173',
+  'http://localhost:5000',
+  'https://a6d926ad.tuguigrande.pages.dev' // <--- ADD YOUR CLOUDFLARE URL HERE
+];
+
 app.use(cors({
-    origin: "http://localhost:5173",
-    methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
-    credentials: true, 
+  origin: function (origin, callback) {
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) return callback(null, true);
+    
+    if (allowedOrigins.indexOf(origin) === -1) {
+      const msg = 'The CORS policy for this site does not allow access from the specified Origin.';
+      return callback(new Error(msg), false);
+    }
+    return callback(null, true);
+  },
+  credentials: true
 }));
 
 // Optimized: Increased payload limit for Base64 images if needed
