@@ -1,5 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
-import "./Profile.css"; // Make sure to keep the CSS file
+import "./Profile.css"; 
+
+// --- FIXED: Use Live Backend URL ---
+const BASE_URL = "https://capstone1-project.onrender.com";
 
 export default function Profile() {
   // --- STATE & API LOGIC ---
@@ -31,7 +34,8 @@ export default function Profile() {
 
   const fetchProfile = async () => {
     try {
-      const res = await fetch("http://localhost:5000/api/users/me", {
+      // UPDATED URL
+      const res = await fetch(`${BASE_URL}/api/users/me`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (!res.ok) throw new Error("Failed to fetch profile");
@@ -67,7 +71,8 @@ export default function Profile() {
   const saveProfile = async () => {
     setSaving(true);
     try {
-      const res = await fetch("http://localhost:5000/api/users/update-info", {
+      // UPDATED URL
+      const res = await fetch(`${BASE_URL}/api/users/update-info`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -93,7 +98,8 @@ export default function Profile() {
     }
     setPasswordSaving(true);
     try {
-      const res = await fetch("http://localhost:5000/api/users/change-password", {
+      // UPDATED URL
+      const res = await fetch(`${BASE_URL}/api/users/change-password`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -133,8 +139,8 @@ export default function Profile() {
     formData.append("photo", file); 
     
     try {
-      // 2. Upload to the CORRECT endpoint defined in server.ts
-      const res = await fetch("http://localhost:5000/api/users/upload-photo", {
+      // 2. Upload to the CORRECT endpoint defined in server.ts (UPDATED URL)
+      const res = await fetch(`${BASE_URL}/api/users/upload-photo`, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,
