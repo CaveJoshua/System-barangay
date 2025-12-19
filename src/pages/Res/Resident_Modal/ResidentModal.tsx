@@ -8,6 +8,9 @@ interface ModalProps {
   residentToEdit?: any;
 }
 
+// --- FIXED: Use Live Backend URL ---
+const BASE_URL = "https://capstone1-project.onrender.com";
+
 // Initial State helper
 const INITIAL_STATE = {
   firstName: '', middleName: '', lastName: '',
@@ -128,14 +131,16 @@ export default function AddResidentModal({ isOpen, onClose, onSuccess, residentT
       if (residentToEdit) {
         // --- UPDATE (PUT) ---
         const id = residentToEdit._id || residentToEdit.id;
-        response = await fetch(`http://localhost:5000/api/residents/${id}`, {
+        // UPDATED URL
+        response = await fetch(`${BASE_URL}/api/residents/${id}`, {
           method: 'PUT',
           headers,
           body: JSON.stringify(payload),
         });
       } else {
         // --- CREATE (POST) ---
-        response = await fetch('http://localhost:5000/api/residents', {
+        // UPDATED URL
+        response = await fetch(`${BASE_URL}/api/residents`, {
           method: 'POST',
           headers,
           body: JSON.stringify(payload),
