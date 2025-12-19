@@ -1,5 +1,3 @@
-// main.tsx (FIXED)
-
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 // 👇️ 1. Import BrowserRouter
@@ -8,12 +6,13 @@ import './index.css'
 import App from './App.tsx'
 
 createRoot(document.getElementById('root')!).render(
-  <StrictMode>
+  <StrictMode>
     {/* 👇️ 2. Add the BrowserRouter wrapper here */}
     <BrowserRouter> 
-      <App />
+      <App />
     </BrowserRouter>
-  </StrictMode>,
+  </StrictMode>,
 )
 
-export const API_BASE_URL = "http://localhost:5000/api/all-data";
+// --- FIXED: Use Live Backend URL ---
+export const API_BASE_URL = "https://capstone1-project.onrender.com/api/all-data";
