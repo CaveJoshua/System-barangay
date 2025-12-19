@@ -17,7 +17,7 @@ interface AddAnnouncementModalProps {
   editData?: any;
 }
 
-const API_URL = 'http://localhost:5000/api/announcements';
+const API_URL = 'https://capstone1-project.onrender.com/api/announcements';
 
 const AddAnnouncementModal: React.FC<AddAnnouncementModalProps> = ({ isOpen, onClose, onSuccess, editData }) => {
   // If the parent passes isOpen but doesn't unmount the component, we can return null here.
