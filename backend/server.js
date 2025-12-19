@@ -1,4 +1,17 @@
-
+/**
+ * ============================================================================
+ * BARANGAY MANAGEMENT SYSTEM - BACKEND SERVER
+ * ============================================================================
+ * * Tech Stack: Node.js, Express, MongoDB (Mongoose), JWT, Bcrypt, Cloudinary
+ * Features:
+ * - Role-Based Access Control (RBAC)
+ * - Blockchain-backed Audit Logging (SHA-256)
+ * - Cloudinary Image Storage
+ * - Rate Limiting & Security Headers
+ * - Pagination & Advanced Search
+ * * @author Gemini & User
+ * @version 2.5.0 (Optimized)
+ */
 
 import express from "express";
 import mongoose from "mongoose";
@@ -8,6 +21,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 import crypto from "crypto";
 import helmet from "helmet";
+// FIX 1: Removed invalid 'ipKeyGenerator' import
 import rateLimit from "express-rate-limit";
 import nodemailer from "nodemailer";
 import { v2 as cloudinary } from "cloudinary";
@@ -135,7 +149,7 @@ const apiLimiter = rateLimit({
     max: 500,
     standardHeaders: true,
     legacyHeaders: false,
-    keyGenerator: ipKeyGenerator 
+    // FIX 2: Removed keyGenerator (defaults to IP automatically)
 });
 app.use("/api/", apiLimiter);
 
@@ -162,7 +176,7 @@ const blotterLimiter = rateLimit({
     standardHeaders: true,
     legacyHeaders: false,
     skip: skipIfAdmin,
-    keyGenerator: ipKeyGenerator,
+    // FIX 3: Removed keyGenerator
     message: { message: "Security Alert: This device has reached the daily limit of 2 Blotter Reports." }
 });
 
@@ -173,7 +187,7 @@ const documentLimiter = rateLimit({
     standardHeaders: true,
     legacyHeaders: false,
     skip: skipIfAdmin, 
-    keyGenerator: ipKeyGenerator,
+    // FIX 4: Removed keyGenerator
     message: { message: "Security Alert: This device has reached the daily limit of 2 Document Requests." }
 });
 
