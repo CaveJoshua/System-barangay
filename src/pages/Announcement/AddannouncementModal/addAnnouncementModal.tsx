@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import './AddAnnouncementModal.css';
+import './addAnnouncementModal.css';
 
 // Expiration options
 const EXPIRATION_OPTIONS = [
