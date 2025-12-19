@@ -19,6 +19,9 @@ interface OfficialsProps {
   initialData?: Official[];
 }
 
+// --- FIXED: Use Live Backend URL ---
+const BASE_URL = "https://capstone1-project.onrender.com";
+
 export default function Officials({ initialData = [] }: OfficialsProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
@@ -34,7 +37,8 @@ export default function Officials({ initialData = [] }: OfficialsProps) {
     if (!token) return;
 
     try {
-      const res = await fetch('http://localhost:5000/api/officials', {
+      // UPDATED URL
+      const res = await fetch(`${BASE_URL}/api/officials`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       
@@ -62,7 +66,8 @@ export default function Officials({ initialData = [] }: OfficialsProps) {
 
     const token = localStorage.getItem('token');
     try {
-      const res = await fetch(`http://localhost:5000/api/officials/${id}`, {
+      // UPDATED URL
+      const res = await fetch(`${BASE_URL}/api/officials/${id}`, {
         method: 'PUT', 
         headers: { 
             'Content-Type': 'application/json',
