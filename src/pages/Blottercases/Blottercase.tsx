@@ -20,6 +20,9 @@ interface BlotterProps {
     initialData?: BlotterCase[];
 }
 
+// Define Base URL for API
+const BASE_URL = 'https://capstone1-project.onrender.com';
+
 export default function BlotterCases({ initialData = [] }: BlotterProps) {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [cases, setCases] = useState<BlotterCase[]>(initialData);
@@ -39,7 +42,8 @@ export default function BlotterCases({ initialData = [] }: BlotterProps) {
         if (!isBackgroundRefresh) setLoading(true);
 
         try {
-            const response = await fetch('http://localhost:5000/api/blotters', {
+            // UPDATED URL
+            const response = await fetch(`${BASE_URL}/api/blotters`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
             if (response.ok) {
@@ -49,9 +53,7 @@ export default function BlotterCases({ initialData = [] }: BlotterProps) {
                     source: c.source || 'Walk-In'
                 }));
 
-                // FIX: DEEP COMPARE to prevent blinking
-                // We checks if the new data is exactly the same as old data.
-                // If yes, we return 'prevCases' (the old state), so React skips the re-render.
+                // DEEP COMPARE to prevent blinking
                 setCases(prevCases => {
                     if (JSON.stringify(prevCases) === JSON.stringify(normalized)) {
                         return prevCases; 
@@ -86,9 +88,10 @@ export default function BlotterCases({ initialData = [] }: BlotterProps) {
         setLoading(true); 
         try {
             const method = editingCase ? 'PUT' : 'POST';
+            // UPDATED URL
             const url = editingCase 
-                ? `http://localhost:5000/api/blotters/${editingCase._id}`
-                : 'http://localhost:5000/api/blotters';
+                ? `${BASE_URL}/api/blotters/${editingCase._id}`
+                : `${BASE_URL}/api/blotters`;
 
             const payload = { 
                 ...formData, 
@@ -128,7 +131,8 @@ export default function BlotterCases({ initialData = [] }: BlotterProps) {
         ));
 
         try {
-            const res = await fetch(`http://localhost:5000/api/blotters/${item._id}`, {
+            // UPDATED URL
+            const res = await fetch(`${BASE_URL}/api/blotters/${item._id}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
                 body: JSON.stringify({ 
@@ -156,7 +160,8 @@ export default function BlotterCases({ initialData = [] }: BlotterProps) {
         ));
 
         try {
-            const res = await fetch(`http://localhost:5000/api/blotters/${id}`, {
+            // UPDATED URL
+            const res = await fetch(`${BASE_URL}/api/blotters/${id}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
                 body: JSON.stringify({ status: 'Archived' }) 
