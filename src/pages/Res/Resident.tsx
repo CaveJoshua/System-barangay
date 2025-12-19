@@ -8,6 +8,9 @@ interface ResidentsProps {
   initialData?: any[];
 }
 
+// --- FIXED: Use Live Backend URL ---
+const BASE_URL = "https://capstone1-project.onrender.com";
+
 // --- SMART SCANNER LOGIC ---
 const KEY_MAPPING: { [key: string]: string[] } = {
     firstName: ['firstname', 'first name', 'given name', 'fname', 'name', 'first'],
@@ -38,7 +41,7 @@ export default function Residents({ initialData }: ResidentsProps) {
   const {
     searchQuery, setSearchQuery,
     paginatedResidents,
-    residents,          
+    residents,           
     handleDelete, handleExport,
     fetchResidents,
     setFilterCategory, 
@@ -72,7 +75,8 @@ export default function Residents({ initialData }: ResidentsProps) {
 
     try {
         const token = localStorage.getItem('token');
-        const res = await fetch('http://localhost:5000/api/residents/clear-all', {
+        // UPDATED URL
+        const res = await fetch(`${BASE_URL}/api/residents/clear-all`, {
             method: 'DELETE',
             headers: { 'Authorization': `Bearer ${token}` }
         });
@@ -149,7 +153,8 @@ export default function Residents({ initialData }: ResidentsProps) {
         // D. Send to Backend
         try {
             const token = localStorage.getItem('token');
-            const res = await fetch('http://localhost:5000/api/residents/bulk-import', {
+            // UPDATED URL
+            const res = await fetch(`${BASE_URL}/api/residents/bulk-import`, {
                 method: 'POST',
                 headers: { 
                     'Content-Type': 'application/json',
