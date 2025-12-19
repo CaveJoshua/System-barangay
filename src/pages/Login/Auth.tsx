@@ -13,6 +13,9 @@ interface AuthProps {
   onLoginSuccess: (token: string, user: any) => void;
 }
 
+// --- FIXED: Use Live Backend URL ---
+const BASE_URL = "https://capstone1-project.onrender.com";
+
 export default function Auth({ onLoginSuccess }: AuthProps) {
   // --- VIEW STATE ---
   const [view, setView] = useState<'landing' | 'login' | 'register' | 'forgot-pass' | 'resident-dashboard'>('landing');
@@ -42,7 +45,8 @@ export default function Auth({ onLoginSuccess }: AuthProps) {
   const [isBlotterModalOpen, setIsBlotterModalOpen] = useState(false);
   const [isDocsModalOpen, setIsDocsModalOpen] = useState(false);
 
-  const API_BASE_URL = "http://localhost:5000/api";
+  // --- FIXED: Update API Variables ---
+  const API_BASE_URL = `${BASE_URL}/api`;
   const AUTH_API_URL = `${API_BASE_URL}/auth`;
 
   // --- EFFECT: Fetch Announcements ---
@@ -51,6 +55,7 @@ export default function Auth({ onLoginSuccess }: AuthProps) {
       const fetchAnnouncements = async () => {
         setDashLoading(true);
         try {
+          // UPDATED URL via API_BASE_URL
           const annRes = await fetch(`${API_BASE_URL}/announcements`);
           if (!annRes.ok) throw new Error(`HTTP Error: ${annRes.status}`);
           const annData = await annRes.json();
@@ -85,6 +90,7 @@ export default function Auth({ onLoginSuccess }: AuthProps) {
   const handleLogin = async () => {
     setLoading(true); setError('');
     try {
+      // UPDATED URL via AUTH_API_URL
       const res = await fetch(`${AUTH_API_URL}/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -106,6 +112,7 @@ export default function Auth({ onLoginSuccess }: AuthProps) {
 
     setLoading(true); setError('');
     try {
+      // UPDATED URL via AUTH_API_URL
       const res = await fetch(`${AUTH_API_URL}/signup`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -134,6 +141,7 @@ export default function Auth({ onLoginSuccess }: AuthProps) {
     setLoading(true); setError(''); setSuccessMsg('');
     
     try {
+      // UPDATED URL via AUTH_API_URL
       const res = await fetch(`${AUTH_API_URL}/forgot-password`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -337,7 +345,7 @@ export default function Auth({ onLoginSuccess }: AuthProps) {
     );
   }
 
-  // === VIEW: REGISTER (UPDATED WITH ROLE SELECTOR) ===
+  // === VIEW: REGISTER ===
   if (view === 'register') {
       return (
         <div className="auth-container">
