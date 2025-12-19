@@ -29,6 +29,9 @@ const getTypeClassName = (type: string) => {
     }
 };
 
+// --- FIXED: Use Live Backend URL ---
+const API_BASE_URL = 'https://capstone1-project.onrender.com/api';
+
 export default function Archives() {
   const [archives, setArchives] = useState<ArchivedItem[]>([]);
   const [loading, setLoading] = useState(true);
@@ -37,7 +40,6 @@ export default function Archives() {
   const [activeTab, setActiveTab] = useState<'All' | 'Resident' | 'Official' | 'Document' | 'Blotter' | 'Announcement'>('All');
 
   const token = localStorage.getItem('token');
-  const API_BASE_URL = 'http://localhost:5000/api';
 
   // --- 1. FETCH ALL DATA (Unified Approach) ---
   const fetchAllArchives = async () => {
@@ -48,6 +50,7 @@ export default function Archives() {
     
     setLoading(true);
     try {
+      // UPDATED URL via API_BASE_URL variable
       const res = await fetch(`${API_BASE_URL}/archives/all`, {
         headers: { Authorization: `Bearer ${token}` }
       });
