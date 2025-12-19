@@ -7,6 +7,9 @@ interface DocsRequestModalProps {
   currentUser: string; 
 }
 
+// --- FIXED: Use Live Backend URL ---
+const BASE_URL = "https://capstone1-project.onrender.com";
+
 const DocsRequestModal: React.FC<DocsRequestModalProps> = ({ isOpen, onClose, currentUser }) => {
   // --- Form State ---
   const [formData, setFormData] = useState({
@@ -72,7 +75,8 @@ const DocsRequestModal: React.FC<DocsRequestModalProps> = ({ isOpen, onClose, cu
     const purposeWithAddress = `${formData.purpose} \n(Residing at: ${fullAddress})`;
 
     try {
-      const res = await fetch('http://localhost:5000/api/certificates', {
+      // --- FIXED: Use BASE_URL variable ---
+      const res = await fetch(`${BASE_URL}/api/certificates`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
