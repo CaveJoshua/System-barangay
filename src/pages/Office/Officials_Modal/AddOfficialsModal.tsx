@@ -1,12 +1,15 @@
-import React, { useState, useEffect } from 'react';
+=import React, { useState, useEffect } from 'react';
 import './AddOfficialsModal.css';
 
 interface ModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSuccess: () => void;
-  officialToEdit?: any | null; // <--- NEW PROP
+  officialToEdit?: any | null; 
 }
+
+// --- FIXED: Use Live Backend URL ---
+const BASE_URL = "https://capstone1-project.onrender.com";
 
 export default function AddOfficialModal({ isOpen, onClose, onSuccess, officialToEdit }: ModalProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -59,9 +62,10 @@ export default function AddOfficialModal({ isOpen, onClose, onSuccess, officialT
     const token = localStorage.getItem('token');
 
     // DECIDE: URL and METHOD based on Edit vs Add
+    // --- FIXED: Use BASE_URL variable ---
     const url = officialToEdit 
-      ? `http://localhost:5000/api/officials/${officialToEdit._id}`
-      : 'http://localhost:5000/api/officials';
+      ? `${BASE_URL}/api/officials/${officialToEdit._id}`
+      : `${BASE_URL}/api/officials`;
     
     const method = officialToEdit ? 'PUT' : 'POST';
 
