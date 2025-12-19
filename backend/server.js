@@ -1,15 +1,4 @@
-/**
- * ============================================================================
- * BARANGAY MANAGEMENT SYSTEM - BACKEND SERVER
- * ============================================================================
- * * Tech Stack: Node.js, Express, MongoDB (Mongoose), JWT, Bcrypt, Cloudinary
- * Features:
- * - Role-Based Access Control (RBAC)
- * - Blockchain-backed Audit Logging (SHA-256)
- * - Cloudinary Image Storage
- * - Rate Limiting & Security Headers
- * - Pagination & Advanced Search
- * * @author Gemini & User
+
  * @version 2.5.0 (Optimized)
  */
 
