@@ -53,6 +53,9 @@ interface AppData {
   // users: any[]; // Removed from AppData
 }
 
+// --- FIXED: Use Live Backend URL ---
+const BASE_URL = "https://capstone1-project.onrender.com";
+
 export default function App() {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
@@ -140,16 +143,17 @@ export default function App() {
         try {
           const headers = { Authorization: `Bearer ${token}` };
 
-          // Basic Stats
-          const statsRes = await fetch('http://localhost:5000/api/stats', { headers });
+          // Basic Stats (UPDATED URL)
+          const statsRes = await fetch(`${BASE_URL}/api/stats`, { headers });
           const statsData = statsRes.ok ? await statsRes.json() : {};
 
+          // UPDATED URLs for all endpoints
           const fetchPromises = [
-            fetch('http://localhost:5000/api/residents', { headers }),
-            fetch('http://localhost:5000/api/officials', { headers }),
-            fetch('http://localhost:5000/api/certificates', { headers }),
-            fetch('http://localhost:5000/api/blotters', { headers }),
-            fetch('http://localhost:5000/api/audit-logs', { headers }),
+            fetch(`${BASE_URL}/api/residents`, { headers }),
+            fetch(`${BASE_URL}/api/officials`, { headers }),
+            fetch(`${BASE_URL}/api/certificates`, { headers }),
+            fetch(`${BASE_URL}/api/blotters`, { headers }),
+            fetch(`${BASE_URL}/api/audit-logs`, { headers }),
           ];
           
           const [residentsRes, officialsRes, documentsRes, blotterRes, auditRes] = await Promise.all(fetchPromises);
