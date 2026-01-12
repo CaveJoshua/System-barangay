@@ -1,4 +1,3 @@
-
 import express from "express";
 import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
@@ -7,7 +6,6 @@ import cors from "cors";
 import dotenv from "dotenv";
 import crypto from "crypto";
 import helmet from "helmet";
-// FIX 1: Removed invalid 'ipKeyGenerator' import
 import rateLimit from "express-rate-limit";
 import nodemailer from "nodemailer";
 import { v2 as cloudinary } from "cloudinary";
@@ -19,7 +17,7 @@ dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 5000;
-const JWT_SECRET = process.env.JWT_SECRET || "fallback_secret_key_change_in_prod"; 
+const JWT_SECRET = process.env.JWT_SECRET || "fallback_secret_key_change_in_prod";
 
 /**
  * ============================================================================
@@ -27,12 +25,18 @@ const JWT_SECRET = process.env.JWT_SECRET || "fallback_secret_key_change_in_prod
  * ============================================================================
  */
 
-// SECURITY MAP: Maps secure environment variables to roles.
-// Users must provide the specific 'signupKey' matching these values to get the role.
-const SIGNUP_KEYS = { 
-    [process.env.KEY_ADMIN]: "admin", 
-    [process.env.KEY_STAFF]: "staff", 
-    [process.env.KEY_RESIDENT]: "resident" 
+// SECURITY: Validate Role Keys
+// Checks if the provided signupKey matches the environment variable for the requested role.
+const isValidRoleKey = (role, key) => {
+    if (!key || !role) return false;
+    const cleanKey = key.trim();
+    
+    // Check against specific environment variables
+    if (role === 'admin' && cleanKey === process.env.KEY_ADMIN) return true;
+    if (role === 'staff' && cleanKey === process.env.KEY_STAFF) return true;
+    if (role === 'resident' && cleanKey === process.env.KEY_RESIDENT) return true;
+    
+    return false;
 };
 
 // ============================================================================
@@ -86,12 +90,6 @@ const transporter = nodemailer.createTransport({
   }
 });
 
-/**
- * Helper to send formatted emails.
- * @param {string} to - Recipient email
- * @param {string} subject - Email subject
- * @param {string} htmlContent - HTML body
- */
 const sendEmail = async (to, subject, htmlContent) => {
   try {
     if (!to) return; 
@@ -115,18 +113,15 @@ const sendEmail = async (to, subject, htmlContent) => {
 app.use(helmet());
 app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }));
 
-// --- UPDATED CORS CONFIGURATION ---
 const allowedOrigins = [
   'http://localhost:5173',
   'http://localhost:5000',
-  'https://a6d926ad.tuguigrande.pages.dev' // <--- ADD YOUR CLOUDFLARE URL HERE
+  'https://a6d926ad.tuguigrande.pages.dev' 
 ];
 
 app.use(cors({
   origin: function (origin, callback) {
-    // Allow requests with no origin (like mobile apps or curl requests)
     if (!origin) return callback(null, true);
-    
     if (allowedOrigins.indexOf(origin) === -1) {
       const msg = 'The CORS policy for this site does not allow access from the specified Origin.';
       return callback(new Error(msg), false);
@@ -136,29 +131,18 @@ app.use(cors({
   credentials: true
 }));
 
-// Optimized: Increased payload limit for Base64 images if needed
 app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ limit: "50mb", extended: true }));
 
-// -----------------------------
 // RATE LIMITING STRATEGIES
-// -----------------------------
-
-// General API Limiter (DDoS Protection)
 const apiLimiter = rateLimit({ 
     windowMs: 15 * 60 * 1000, // 15 minutes
     max: 500,
     standardHeaders: true,
     legacyHeaders: false,
-    // FIX 2: Removed keyGenerator (defaults to IP automatically)
 });
 app.use("/api/", apiLimiter);
 
-/**
- * Middleware to check if user is Admin or Staff to skip rate limits.
- * @param {Request} req 
- * @returns {boolean}
- */
 const skipIfAdmin = (req) => {
     const token = req.headers.authorization?.split(" ")[1];
     if (token) {
@@ -170,25 +154,21 @@ const skipIfAdmin = (req) => {
     return false; 
 };
 
-// Specific Limiter for Blotter Reports (Spam Prevention)
 const blotterLimiter = rateLimit({
     windowMs: 24 * 60 * 60 * 1000, 
     max: 2, 
     standardHeaders: true,
     legacyHeaders: false,
     skip: skipIfAdmin,
-    // FIX 3: Removed keyGenerator
     message: { message: "Security Alert: This device has reached the daily limit of 2 Blotter Reports." }
 });
 
-// Specific Limiter for Document Requests
 const documentLimiter = rateLimit({
     windowMs: 24 * 60 * 60 * 1000, 
     max: 2, 
     standardHeaders: true,
     legacyHeaders: false,
     skip: skipIfAdmin, 
-    // FIX 4: Removed keyGenerator
     message: { message: "Security Alert: This device has reached the daily limit of 2 Document Requests." }
 });
 
@@ -196,7 +176,6 @@ const documentLimiter = rateLimit({
 // 6. DATA MODELS (SCHEMAS)
 // ============================================================================
 
-// --- User Schema ---
 const userSchema = new mongoose.Schema({
   username: { type: String, unique: true, required: true, index: true },
   password: { type: String, required: true },
@@ -212,7 +191,6 @@ const userSchema = new mongoose.Schema({
 
 const User = mongoose.model("User", userSchema);
 
-// --- Verification Schema ---
 const verificationSchema = new mongoose.Schema({
     userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true, index: true },
     fullName: { type: String, required: true },
@@ -227,24 +205,21 @@ const verificationSchema = new mongoose.Schema({
 });
 const Verification = mongoose.model("Verification", verificationSchema);
 
-// --- Audit Log Schema (Blockchain) ---
 const logSchema = new mongoose.Schema({
   timestamp: { type: String, required: true }, 
   user: String,
   action: String,
   module: String,
   description: String,
-  hash: { type: String, unique: true, required: true }, // The digital signature
-  previousHash: { type: String, required: true },       // Link to previous block
+  hash: { type: String, unique: true, required: true }, 
+  previousHash: { type: String, required: true },       
 }, { timestamps: true });
 
-// Optimize: Index on hash for verification speed
 logSchema.index({ hash: 1 });
 logSchema.index({ timestamp: -1 });
 
 const AuditLog = mongoose.model("AuditLog", logSchema);
 
-// --- Official Schema ---
 const officialSchema = new mongoose.Schema({
   name: String,
   position: String,
@@ -257,12 +232,10 @@ const officialSchema = new mongoose.Schema({
 }, { timestamps: true });
 const Official = mongoose.model("Official", officialSchema);
 
-// --- Resident Schema ---
 const residentSchema = new mongoose.Schema({
     firstName: { type: String, index: true },
     lastName: { type: String, index: true },
     name: String, 
-    // OPTIMIZATION: Mongoose Validation for Non-Negative Age
     age: { 
         type: Number, 
         min: [0, 'Age cannot be negative'],
@@ -281,14 +254,11 @@ const residentSchema = new mongoose.Schema({
     isFarmer: { type: Boolean, default: false }
 }, { timestamps: true });
 
-// Optimize: Text index for search functionality
 residentSchema.index({ firstName: 'text', lastName: 'text', alias: 'text' });
 const Resident = mongoose.model("Resident", residentSchema);
 
-// --- Certificate Schema ---
 const certificateSchema = new mongoose.Schema({
   residentName: { type: String, index: true },
-  // OPTIMIZATION: Validation
   age: { type: Number, min: [0, 'Age cannot be negative'] },
   certificateType: String,
   purpose: String,
@@ -300,7 +270,6 @@ const certificateSchema = new mongoose.Schema({
 }, { timestamps: true });
 const Certificate = mongoose.model("Certificate", certificateSchema);
 
-// --- Blotter Case Schema ---
 const blotterCaseSchema = new mongoose.Schema({
   complainant: { type: String, required: true },
   contactNumber: { type: String }, 
@@ -314,7 +283,6 @@ const blotterCaseSchema = new mongoose.Schema({
 }, { timestamps: true });
 const BlotterCase = mongoose.model("BlotterCase", blotterCaseSchema);
 
-// --- Announcement Schema ---
 const announcementSchema = new mongoose.Schema({
     title: { type: String, required: true },
     description: { type: String, required: true },
@@ -336,21 +304,12 @@ const Announcement = mongoose.model("Announcement", announcementSchema);
 // 7. HELPERS: AUDIT, AUTH, & UTILS
 // ============================================================================
 
-/**
- * Creates an immutable audit log entry linked to the previous entry.
- * Implements a basic Blockchain structure (Linked List + Hashing).
- */
 const logAction = async (action, module, description, user = "System") => {
   try {
-    // 1. Get the Tip of the Chain
     const latestLog = await AuditLog.findOne().sort({ timestamp: -1 });
     const prevHash = latestLog ? latestLog.hash : "00000000000000000000000000000000";
-
-    // 2. Lock Timestamp as ISO String (CRITICAL FOR VERIFICATION)
     const timestamp = new Date().toISOString();
 
-    // 3. Create Canonical Object (Block Data)
-    // The order must be EXACT: timestamp, user, action, module, description, previousHash
     const dataToHash = {
       timestamp: timestamp,
       user: user,
@@ -360,10 +319,8 @@ const logAction = async (action, module, description, user = "System") => {
       previousHash: prevHash
     };
 
-    // 4. Mine the Block (SHA-256)
     const hash = crypto.createHash("sha256").update(JSON.stringify(dataToHash)).digest("hex");
 
-    // 5. Save to Ledger
     await AuditLog.create({
       timestamp: timestamp, 
       user,
@@ -375,15 +332,11 @@ const logAction = async (action, module, description, user = "System") => {
     });
 
     console.log(`🔗 [BLOCKCHAIN] Block Mined: ${hash.substring(0, 10)}... | Action: ${action}`);
-
   } catch (err) {
     console.error("❌ Blockchain Error:", err.message);
   }
 };
 
-/**
- * Middleware: Verify JWT Token
- */
 const authMiddleware = (req, res, next) => {
   const token = req.headers.authorization?.split(" ")[1];
   if (!token) return res.status(401).json({ message: "No token provided" });
@@ -396,7 +349,6 @@ const authMiddleware = (req, res, next) => {
   }
 };
 
-// Role-Based Access Control Middlewares
 const adminOnly = (req, res, next) => { 
     if (req.user.role !== "admin") return res.status(403).json({ message: "Admin access required" }); 
     next(); 
@@ -410,7 +362,7 @@ const adminOrStaff = (req, res, next) => {
 // 8. ROUTES: AUTHENTICATION
 // ============================================================================
 
-// 1. SIGNUP (Optimized with Security Key Check)
+// 1. SIGNUP (Optimized with Fixed Security Key Check)
 app.post("/api/auth/signup", async (req, res) => {
   try {
     const { username, password, name, position, email, contactNumber, role, signupKey } = req.body; 
@@ -424,18 +376,21 @@ app.post("/api/auth/signup", async (req, res) => {
     if (await User.findOne({ username })) return res.status(400).json({ message: "Username taken" });
     if (await User.findOne({ email })) return res.status(400).json({ message: "Email already registered" });
 
-    // --- OPTIMIZED ROLE ASSIGNMENT ---
-    // User requests a role (e.g., 'admin').
-    // We check if the provided 'signupKey' is the correct key for that role.
+    // --- OPTIMIZED ROLE ASSIGNMENT (FIXED) ---
+    // Sanitize Inputs: trim spaces and lowercase role to ensure matching works
+    const requestedRole = role ? role.toLowerCase().trim() : 'resident';
+    const providedKey = signupKey ? signupKey.trim() : '';
     let finalRole = 'resident';
     
-    if (role && role !== 'resident') {
-        // If they want to be admin/staff, they MUST provide the correct key
-        if (signupKey && SIGNUP_KEYS[signupKey] === role) {
-            finalRole = role;
+    if (requestedRole !== 'resident') {
+        // If they want to be admin/staff, we check against specific keys
+        // logic: if validation returns true, grant role. Else reject.
+        if (isValidRoleKey(requestedRole, providedKey)) {
+            finalRole = requestedRole;
         } else {
             // Invalid key provided for the requested role
-            return res.status(403).json({ message: `Invalid security key for role: ${role}` });
+            console.warn(`[AUTH] Failed signup attempt for role: ${requestedRole} with invalid key.`);
+            return res.status(403).json({ message: `Invalid security key for role: ${requestedRole}` });
         }
     }
 
@@ -523,10 +478,6 @@ app.post("/api/auth/resident-login", async (req, res) => {
 // 9. ROUTES: RESIDENTS
 // ============================================================================
 
-/**
- * DELETE: Clear All (Archive All)
- * Optimization: Uses bulk write for performance.
- */
 app.delete("/api/residents/clear-all", authMiddleware, adminOnly, async (req, res) => {
     try {
         const result = await Resident.updateMany({ status: { $ne: 'Archived' } }, { $set: { status: 'Archived' } });
@@ -535,10 +486,6 @@ app.delete("/api/residents/clear-all", authMiddleware, adminOnly, async (req, re
     } catch (err) { res.status(500).json({ message: "Failed to clear", error: err.message }); }
 });
 
-/**
- * POST: Bulk Import
- * Optimization: Validates inputs and sanitizes Age to prevent negative numbers.
- */
 app.post("/api/residents/bulk-import", authMiddleware, adminOrStaff, async (req, res) => {
   try {
     const residentsData = req.body;
@@ -547,10 +494,7 @@ app.post("/api/residents/bulk-import", authMiddleware, adminOrStaff, async (req,
     const cleanData = residentsData.map(res => ({
       firstName: res.firstName || res.name?.split(" ")[0] || "Unknown",
       lastName: res.lastName || res.name?.split(" ").slice(1).join(" ") || "",
-      
-      // OPTIMIZATION: Logic to prevent negative numbers from Excel/CSV imports
       age: Math.max(0, Number(res.age) || 0), 
-
       zone: res.zone || "Unassigned",
       status: res.status || "Active",
       contact: res.contact || res.phone || "",
@@ -564,7 +508,6 @@ app.post("/api/residents/bulk-import", authMiddleware, adminOrStaff, async (req,
       isFarmer: res.isFarmer || false
     }));
 
-    // ordered: false ensures that if one fails (e.g. duplicate), others still continue
     const result = await Resident.insertMany(cleanData, { ordered: false });
     await logAction("IMPORT", "Resident", `Bulk imported ${result.length} residents`, req.user.username);
     res.status(201).json({ message: "Bulk import successful", count: result.length });
@@ -576,7 +519,6 @@ app.post("/api/residents/bulk-import", authMiddleware, adminOrStaff, async (req,
 
 app.post("/api/residents", authMiddleware, adminOrStaff, async (req, res) => {
   try {
-    // OPTIMIZATION: Immediate validation
     if (req.body.age !== undefined && req.body.age < 0) {
         return res.status(400).json({ message: "Validation Error: Age cannot be negative." });
     }
@@ -586,20 +528,14 @@ app.post("/api/residents", authMiddleware, adminOrStaff, async (req, res) => {
   } catch (err) { res.status(500).json({ message: "Failed", error: err.message }); }
 });
 
-/**
- * GET: Fetch Residents
- * Optimization: Implements Pagination and Filtering
- * Query Params: ?page=1&limit=50&search=John
- */
 app.get("/api/residents", authMiddleware, async (req, res) => {
   try { 
       const page = parseInt(req.query.page) || 1;
-      const limit = parseInt(req.query.limit) || 0; // 0 = no limit (for backward compatibility if needed)
+      const limit = parseInt(req.query.limit) || 0; 
       const search = req.query.search || "";
 
       let query = { status: "Active" };
 
-      // Search Logic
       if (search) {
           query.$or = [
               { firstName: { $regex: search, $options: 'i' } },
@@ -616,7 +552,6 @@ app.get("/api/residents", authMiddleware, async (req, res) => {
 
       const residents = await residentsQuery;
       
-      // If pagination requested, return meta data
       if (limit > 0) {
           const total = await Resident.countDocuments(query);
           return res.json({
@@ -638,11 +573,9 @@ app.get("/api/residents/archive", authMiddleware, adminOrStaff, async (req, res)
 
 app.put("/api/residents/:id", authMiddleware, adminOrStaff, async (req, res) => {
   try {
-    // OPTIMIZATION: Input Validation
     if (req.body.age !== undefined && req.body.age < 0) {
         return res.status(400).json({ message: "Validation Error: Age cannot be negative." });
     }
-    // runValidators: true ensures Schema limits are respected on update
     const resident = await Resident.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
     if (!resident) return res.status(404).json({ message: "Resident not found" });
     await logAction("UPDATE", "Resident", `Updated resident: ${resident.firstName}`, req.user.username);
@@ -723,7 +656,6 @@ app.post("/api/certificates", documentLimiter, async (req, res) => {
   try {
     const { residentName, certificateType, purpose, referenceNo, dateRequested, source, status, age } = req.body;
     
-    // OPTIMIZATION: Backend check for negative age
     if (age !== undefined && Number(age) < 0) {
         return res.status(400).json({ message: "Validation Error: Age cannot be negative." });
     }
@@ -1006,10 +938,6 @@ app.get("/api/audit-logs", authMiddleware, adminOnly, async (req, res) => {
   } catch (err) { res.status(500).json({ message: "Failed", error: err.message }); }
 });
 
-/**
- * OPTIMIZATION: Blockchain Integrity Check
- * Iterates through the audit log to verify cryptographic links.
- */
 app.get("/api/audit-logs/verify", authMiddleware, adminOnly, async (req, res) => {
     try {
         // Fetch logs in ascending order (Oldest -> Newest)
@@ -1052,7 +980,6 @@ app.get("/api/audit-logs/verify", authMiddleware, adminOnly, async (req, res) =>
         if (isValid) {
             res.json({ status: "Secure", message: "Blockchain integrity verified. No tampering detected." });
         } else {
-            // Log security alert to console
             console.error("🚨 SECURITY ALERT: Blockchain tampering detected at block", compromisedBlock);
             res.status(400).json({ 
                 status: "Compromised", 
@@ -1163,10 +1090,6 @@ app.put("/api/users/change-password", authMiddleware, async (req, res) => {
     }
 });
 
-/**
- * OPTIMIZATION: Unified Archives Fetcher
- * Fetches all archived items from different collections and standardizes them.
- */
 app.get("/api/archives/all", authMiddleware, adminOrStaff, async (req, res) => {
     try {
         const [residents, officials, documents, blotters, announcements] = await Promise.all([
