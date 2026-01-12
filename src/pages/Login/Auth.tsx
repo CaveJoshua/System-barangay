@@ -13,7 +13,6 @@ interface AuthProps {
   onLoginSuccess: (token: string, user: any) => void;
 }
 
-// --- FIXED: Use Live Backend URL ---
 const BASE_URL = "https://capstone1-project.onrender.com";
 
 export default function Auth({ onLoginSuccess }: AuthProps) {
@@ -26,14 +25,15 @@ export default function Auth({ onLoginSuccess }: AuthProps) {
   // --- FORM STATES: LOGIN ---
   const [loginUser, setLoginUser] = useState('');
   const [loginPass, setLoginPass] = useState('');
-  
+   
   // --- FORM STATES: REGISTER ---
   const [regUser, setRegUser] = useState('');
   const [regEmail, setRegEmail] = useState('');
   const [regPass, setRegPass] = useState('');
   const [regName, setRegName] = useState('');
-  const [regPosition, setRegPosition] = useState('');
-  const [regRole, setRegRole] = useState('resident'); // <--- ADDED: Default role
+  const [regPosition, setRegPosition] = useState(''); // e.g., "Barangay Captain", "SK Chairman"
+  const [regRole, setRegRole] = useState('resident'); 
+  const [signupKey, setSignupKey] = useState(''); // <--- ADDED: Security Key State
 
   // --- FORM STATES: FORGOT PASSWORD ---
   const [forgotEmail, setForgotEmail] = useState('');
@@ -45,9 +45,20 @@ export default function Auth({ onLoginSuccess }: AuthProps) {
   const [isBlotterModalOpen, setIsBlotterModalOpen] = useState(false);
   const [isDocsModalOpen, setIsDocsModalOpen] = useState(false);
 
-  // --- FIXED: Update API Variables ---
   const API_BASE_URL = `${BASE_URL}/api`;
   const AUTH_API_URL = `${API_BASE_URL}/auth`;
+
+  // --- HELPER: Auto-Assign Role based on Position (Optional Quality of Life) ---
+  useEffect(() => {
+    const lowerPos = regPosition.toLowerCase();
+    if (view === 'register') {
+        if (lowerPos.includes('captain') || lowerPos.includes('secretary')) {
+            setRegRole('admin');
+        } else if (lowerPos.includes('kagawad') || lowerPos.includes('sk') || lowerPos.includes('treasurer')) {
+            setRegRole('staff');
+        }
+    }
+  }, [regPosition, view]);
 
   // --- EFFECT: Fetch Announcements ---
   useEffect(() => {
@@ -55,7 +66,6 @@ export default function Auth({ onLoginSuccess }: AuthProps) {
       const fetchAnnouncements = async () => {
         setDashLoading(true);
         try {
-          // UPDATED URL via API_BASE_URL
           const annRes = await fetch(`${API_BASE_URL}/announcements`);
           if (!annRes.ok) throw new Error(`HTTP Error: ${annRes.status}`);
           const annData = await annRes.json();
@@ -82,7 +92,7 @@ export default function Auth({ onLoginSuccess }: AuthProps) {
 
   // --- VIEW SWITCHER ---
   const switchView = (newView: typeof view) => {
-    setError(''); setSuccessMsg('');
+    setError(''); setSuccessMsg(''); setSignupKey('');
     setView(newView);
   };
 
@@ -90,7 +100,6 @@ export default function Auth({ onLoginSuccess }: AuthProps) {
   const handleLogin = async () => {
     setLoading(true); setError('');
     try {
-      // UPDATED URL via AUTH_API_URL
       const res = await fetch(`${AUTH_API_URL}/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -106,13 +115,18 @@ export default function Auth({ onLoginSuccess }: AuthProps) {
   const handleRegister = async () => {
     // Standard validation
     if(!regUser || !regPass || !regEmail || !regName) {
-        setError("Please fill in all required fields (Name, Username, Email, Password).");
+        setError("Please fill in all required fields.");
+        return;
+    }
+
+    // Key Validation for Non-Residents
+    if (regRole !== 'resident' && !signupKey) {
+        setError(`A Security Key is required to register as ${regRole.toUpperCase()}.`);
         return;
     }
 
     setLoading(true); setError('');
     try {
-      // UPDATED URL via AUTH_API_URL
       const res = await fetch(`${AUTH_API_URL}/signup`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -122,7 +136,8 @@ export default function Auth({ onLoginSuccess }: AuthProps) {
             password: regPass,
             name: regName, 
             position: regPosition,
-            role: regRole // <--- PASS THE SELECTED ROLE
+            role: regRole,
+            signupKey: signupKey // <--- FIXED: Sending the key to backend
         })
       });
       const data = await res.json();
@@ -141,7 +156,6 @@ export default function Auth({ onLoginSuccess }: AuthProps) {
     setLoading(true); setError(''); setSuccessMsg('');
     
     try {
-      // UPDATED URL via AUTH_API_URL
       const res = await fetch(`${AUTH_API_URL}/forgot-password`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -364,10 +378,25 @@ export default function Auth({ onLoginSuccess }: AuthProps) {
                         <label>Account Role *</label>
                         <select className="auth-input" value={regRole} onChange={(e) => setRegRole(e.target.value)}>
                             <option value="resident">Resident</option>
-                            <option value="staff">Barangay Staff</option>
-                            <option value="admin">System Admin</option>
+                            <option value="staff">Barangay Staff (Kagawad / SK / Treasurer)</option>
+                            <option value="admin">System Admin (Captain / Secretary)</option>
                         </select>
                     </div>
+
+                    {/* DYNAMIC SECURITY KEY INPUT */}
+                    {regRole !== 'resident' && (
+                        <div className="form-group" style={{border: '1px solid #ffd700', padding: '10px', borderRadius: '5px', background: 'rgba(255, 215, 0, 0.1)'}}>
+                            <label style={{color: '#ffd700'}}>Security Key (Required for Officials) *</label>
+                            <input 
+                                type="password" 
+                                className="auth-input" 
+                                placeholder={`Enter ${regRole.toUpperCase()} Key`}
+                                value={signupKey} 
+                                onChange={(e) => setSignupKey(e.target.value)} 
+                            />
+                            <small style={{color:'white', fontSize:'0.7rem'}}>Ask the Barangay Captain or Secretary for this key.</small>
+                        </div>
+                    )}
 
                     <div className="form-group">
                         <label>Full Name *</label>
@@ -375,8 +404,14 @@ export default function Auth({ onLoginSuccess }: AuthProps) {
                     </div>
 
                     <div className="form-group">
-                        <label>Official Position (Optional)</label>
-                        <input type="text" className="auth-input" placeholder="e.g. Secretary (If Staff)" value={regPosition} onChange={(e) => setRegPosition(e.target.value)} />
+                        <label>Official Position *</label>
+                        <input 
+                            type="text" 
+                            className="auth-input" 
+                            placeholder="e.g. SK Chairman, Kagawad, Secretary" 
+                            value={regPosition} 
+                            onChange={(e) => setRegPosition(e.target.value)} 
+                        />
                     </div>
 
                     <div className="form-group">
