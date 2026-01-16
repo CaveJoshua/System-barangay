@@ -1,63 +1,287 @@
 /* =========================================
-   OFFICIALS TABLE ACTIONS (FINAL POLISH)
+   1. MODAL CONTAINER & OVERLAY
    ========================================= */
 
-/* 1. Target the Table Cell to center everything */
-.resident-table td:last-child {
-  text-align: center; /* Horizontally center the content */
-  width: 140px;       /* Fixed width to prevent squashing */
-  vertical-align: middle;
-}
-
-/* 2. The Container: perfectly centered flexbox */
-.action-buttons {
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5); /* Dimmed background */
   display: flex;
-  align-items: center;
-  justify-content: center; /* Centers the buttons within the cell */
-  gap: 12px;               /* Clean spacing between Edit and Delete */
-}
-
-/* 3. Base Button Style - Larger & cleaner */
-.action-btn {
-  width: 38px;  
-  height: 38px;
-  border-radius: 8px; /* Modern rounded corners (squircle) */
-  border: 1px solid transparent; 
-  display: flex;
-  align-items: center;
   justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  backdrop-filter: blur(3px); /* Modern blur effect */
+}
+
+.modal-content {
+  background: white;
+  padding: 0; 
+  border-radius: 12px;
+  width: 90%;
+  max-width: 600px; /* Standard width */
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  /* Scrollable Body Handling is inline in TSX, but backup here: */
+  max-height: 90vh; 
+}
+
+/* =========================================
+   2. HEADER & SECTIONS
+   ========================================= */
+
+.modal-header {
+  padding: 20px 24px;
+  border-bottom: 1px solid #e5e7eb;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #fff;
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+}
+
+.modal-header h2 {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #111827;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 24px;
+  color: #9ca3af;
   cursor: pointer;
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-  font-size: 16px; 
-  background-color: white; 
+  transition: color 0.2s;
+  padding: 0;
+  line-height: 1;
 }
 
-/* 4. Edit Button (Blue Theme) */
-.edit-btn {
-  background-color: #f0f5ff; /* Crisp light blue */
-  color: #2f54eb;            /* Deep readable blue */
-  border: 1px solid #adc6ff; 
+.close-btn:hover {
+  color: #111827;
 }
 
-.edit-btn:hover {
-  background-color: #2f54eb; 
-  color: #ffffff;
-  border-color: #2f54eb;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(47, 84, 235, 0.2); 
+.section-title {
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #6b7280;
+  font-weight: 600;
+  margin-bottom: 16px;
+  margin-top: 24px;
+  border-bottom: 1px solid #f3f4f6;
+  padding-bottom: 8px;
 }
 
-/* 5. Delete Button (Red Theme) */
-.delete-btn {
-  background-color: #fff1f0; /* Crisp light red */
-  color: #f5222d;            /* Deep readable red */
-  border: 1px solid #ffa39e; 
+.section-title:first-child {
+  margin-top: 0;
 }
 
-.delete-btn:hover {
-  background-color: #f5222d; 
-  color: #ffffff;
-  border-color: #f5222d;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(245, 34, 45, 0.2); 
+.modal-body {
+  padding: 24px;
+  overflow-y: auto; /* Allows form to scroll if tall */
+}
+
+/* =========================================
+   3. FORM INPUTS & GRID
+   ========================================= */
+
+.form-group {
+  margin-bottom: 16px;
+  display: flex;
+  flex-direction: column;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.row-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #374151;
+  margin-bottom: 6px;
+}
+
+.form-input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  color: #111827;
+  transition: all 0.2s;
+  box-sizing: border-box; 
+  background-color: #fff;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+/* Date Picker Indicator Fix */
+.date-picker {
+  cursor: pointer;
+}
+
+/* =========================================
+   4. VALIDATION STYLES (WARNINGS)
+   ========================================= */
+
+/* Red Border when invalid */
+.input-error {
+  border-color: #ef4444 !important;
+  background-color: #fff5f5;
+}
+
+.input-error:focus {
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.15) !important;
+}
+
+/* Red Text Message below input */
+.error-msg {
+  color: #dc2626;
+  font-size: 0.75rem;
+  margin-top: 6px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-2px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* =========================================
+   5. SEARCH DROPDOWN (The "Feasible" Scroll)
+   ========================================= */
+
+.suggestions-dropdown {
+  position: absolute;
+  top: 100%; /* Directly below input */
+  left: 0;
+  right: 0;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  z-index: 1001; /* Above everything else */
+  
+  /* SCROLL LOGIC: 
+     - Each item is approx 42px. 
+     - 42px * 3.5 = ~147px 
+     - This ensures user sees 3 items + a cut-off 4th item to indicate scrolling. */
+  max-height: 150px; 
+  
+  overflow-y: auto; /* Vertical Scrollbar */
+  overflow-x: hidden;
+  
+  list-style: none;
+  padding: 4px;
+  margin-top: 4px;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+/* Customize Scrollbar for Chrome/Safari/Edge */
+.suggestions-dropdown::-webkit-scrollbar {
+  width: 6px;
+}
+.suggestions-dropdown::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+.suggestions-dropdown::-webkit-scrollbar-thumb {
+  background: #d1d5db; 
+  border-radius: 4px;
+}
+.suggestions-dropdown::-webkit-scrollbar-thumb:hover {
+  background: #9ca3af; 
+}
+
+/* The List Item */
+.suggestion-item {
+  padding: 10px 12px;
+  cursor: pointer;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  color: #374151;
+  transition: background 0.15s;
+  white-space: nowrap;      /* Prevent text wrapping */
+  overflow: hidden;         /* Hide overflow text */
+  text-overflow: ellipsis;  /* Add ... if name is too long */
+}
+
+.suggestion-item:hover {
+  background-color: #f3f4f6;
+  color: #111827;
+}
+
+/* =========================================
+   6. FOOTER BUTTONS
+   ========================================= */
+
+.modal-footer {
+  padding: 16px 24px;
+  background-color: #f9fafb;
+  border-top: 1px solid #e5e7eb;
+  border-bottom-left-radius: 12px;
+  border-bottom-right-radius: 12px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+.btn-white {
+  padding: 9px 18px;
+  background-color: white;
+  border: 1px solid #d1d5db;
+  color: #374151;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-white:hover {
+  background-color: #f3f4f6;
+  border-color: #9ca3af;
+}
+
+.btn-black {
+  padding: 9px 18px;
+  background-color: #111827;
+  border: 1px solid transparent;
+  color: white;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-black:hover {
+  background-color: #1f2937;
+  transform: translateY(-1px);
+}
+
+.btn-black:disabled {
+  background-color: #9ca3af;
+  cursor: not-allowed;
+  transform: none;
 }
