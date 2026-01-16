@@ -606,34 +606,73 @@ app.delete("/api/residents/permanent/:id", authMiddleware, adminOnly, async (req
 // ============================================================================
 
 app.get("/api/officials", authMiddleware, async (req, res) => {
-  try { const officials = await Official.find({ status: "Active" }).sort({ createdAt: -1 }); res.json(officials); } catch (err) { res.status(500).json({ message: "Failed", error: err.message }); }
+  try { 
+      // Fetch Active officials, sorted by creation date (newest first)
+      const officials = await Official.find({ status: "Active" }).sort({ createdAt: -1 }); 
+      res.json(officials); 
+  } catch (err) { res.status(500).json({ message: "Failed", error: err.message }); }
 });
 
 app.get("/api/officials/archive", authMiddleware, adminOrStaff, async (req, res) => {
-  try { const officials = await Official.find({ status: "Archived" }).sort({ updatedAt: -1 }); res.json(officials); } catch (err) { res.status(500).json({ message: "Failed", error: err.message }); }
+  try { 
+      const officials = await Official.find({ status: "Archived" }).sort({ updatedAt: -1 }); 
+      res.json(officials); 
+  } catch (err) { res.status(500).json({ message: "Failed", error: err.message }); }
 });
 
+// --- UPDATED: POST (Add Official) with VALIDATION ---
 app.post("/api/officials", authMiddleware, adminOnly, async (req, res) => {
   try {
+    const { name, contact, email, termStart, termEnd } = req.body;
+
+    // 1. Strict Validation: Contact Number (11 Digits)
+    if (contact && !/^\d{11}$/.test(contact)) {
+        return res.status(400).json({ message: "Validation Error: Contact number must be exactly 11 digits (e.g., 09123456789)." });
+    }
+
+    // 2. Strict Validation: Email Format
+    if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        return res.status(400).json({ message: "Validation Error: Invalid email format." });
+    }
+
+    // 3. Logic: Create NEW Record (New System ID)
+    // Even if the name exists, this creates a fresh ID for the new term.
     const official = await Official.create(req.body);
-    await logAction("CREATE", "Official", `Added official: ${official.name}`, req.user.username);
-    res.json({ message: "Official added", official });
-  } catch (err) { res.status(500).json({ message: "Failed", error: err.message }); }
+    
+    await logAction("CREATE", "Official", `Added official (New Term): ${official.name}`, req.user.username);
+    res.json({ message: "Official added successfully", official });
+  } catch (err) { res.status(500).json({ message: "Failed to add official", error: err.message }); }
 });
 
+// --- UPDATED: PUT (Update Official) with VALIDATION ---
 app.put("/api/officials/:id", authMiddleware, adminOnly, async (req, res) => {
   try {
+    const { contact, email } = req.body;
+
+    // 1. Strict Validation: Contact Number
+    if (contact && !/^\d{11}$/.test(contact)) {
+        return res.status(400).json({ message: "Validation Error: Contact number must be exactly 11 digits." });
+    }
+
+    // 2. Strict Validation: Email
+    if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        return res.status(400).json({ message: "Validation Error: Invalid email format." });
+    }
+
     const official = await Official.findByIdAndUpdate(req.params.id, req.body, { new: true });
     if (!official) return res.status(404).json({ message: "Official not found" });
-    await logAction("UPDATE", "Official", `Updated official: ${official.name}`, req.user.username);
-    res.json({ message: "Official updated", official });
-  } catch (err) { res.status(500).json({ message: "Failed", error: err.message }); }
+    
+    await logAction("UPDATE", "Official", `Updated official details: ${official.name}`, req.user.username);
+    res.json({ message: "Official updated successfully", official });
+  } catch (err) { res.status(500).json({ message: "Failed to update", error: err.message }); }
 });
 
 app.delete("/api/officials/:id", authMiddleware, adminOrStaff, async (req, res) => {
   try {
+    // Soft Delete: Moves to Archive by changing status
     const official = await Official.findByIdAndUpdate(req.params.id, { status: "Archived" }, { new: true });
     if (!official) return res.status(404).json({ message: "Official not found" });
+    
     await logAction("ARCHIVE", "Official", `Moved official to archive: ${official.name}`, req.user.username);
     res.json({ message: "Official moved to Archive" });
   } catch (err) { res.status(500).json({ message: "Failed", error: err.message }); }
