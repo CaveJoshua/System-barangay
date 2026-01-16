@@ -117,7 +117,7 @@ const allowedOrigins = [
   'http://localhost:5173',
   'http://localhost:5000',
   'https://a6d926ad.tuguigrande.pages.dev'
-  'https://0474445f.tugui-grande.pages.dev'
+  'https://0474445f.tuguigrande.pages.dev'
 ];
 
 app.use(cors({
