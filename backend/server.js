@@ -537,9 +537,11 @@ app.get("/api/residents", authMiddleware, async (req, res) => {
       let query = { status: "Active" };
 
       if (search) {
+          // --- FIX: SEARCHES 'name' FIELD TOO ---
           query.$or = [
               { firstName: { $regex: search, $options: 'i' } },
               { lastName: { $regex: search, $options: 'i' } },
+              { name: { $regex: search, $options: 'i' } },     // <--- ADDED THIS LINE
               { alias: { $regex: search, $options: 'i' } }
           ];
       }
@@ -547,19 +549,17 @@ app.get("/api/residents", authMiddleware, async (req, res) => {
       const residentsQuery = Resident.find(query).sort({ createdAt: -1 });
 
       if (limit > 0) {
-          residentsQuery.skip((page - 1) * limit).limit(limit);
-      }
-
-      const residents = await residentsQuery;
-      
-      if (limit > 0) {
+          const residentsQueryLimited = Resident.find(query).sort({ createdAt: -1 }).skip((page - 1) * limit).limit(limit);
+          const residents = await residentsQueryLimited;
           const total = await Resident.countDocuments(query);
+          
           return res.json({
               data: residents,
               pagination: { total, page, limit, pages: Math.ceil(total / limit) }
           });
       }
 
+      const residents = await residentsQuery;
       res.json(residents); 
   } catch (err) { res.status(500).json({ message: "Failed", error: err.message }); }
 });
