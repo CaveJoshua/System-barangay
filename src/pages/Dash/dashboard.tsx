@@ -159,7 +159,7 @@ export default function Dashboard({
       
       {/* HEADER */}
       <div className="page-title">
-        <h1>Barangay Tugui Grande</h1>
+        <h1>Barangay Eng.hill</h1>
         <p>
           Welcome back, <strong>{displayName}</strong> <span style={{fontSize:'0.9em', color:'#666'}}>({displayRole})</span>. Today is {today}.
         </p>
