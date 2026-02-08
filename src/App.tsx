@@ -208,7 +208,7 @@ export default function App() {
     <div className="app-root">
       {/* Sidebar */}
       <nav className="sidebar">
-        <div className="sidebar-header"><i className="fas fa-landmark"></i>Bar Chain</div>
+        <div className="sidebar-header"><i className="fas fa-landmark"></i>SMART BARANGAY</div>
         <ul className="sidebar-menu">
           <li><a href="#" className={currentView === 'dashboard' ? 'active' : ''} onClick={() => setCurrentView('dashboard')}><i className="fas fa-th-large"></i> Dashboard</a></li>
           
